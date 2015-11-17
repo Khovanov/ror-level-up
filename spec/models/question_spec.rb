@@ -20,5 +20,6 @@ RSpec.describe Question, type: :model do
   it { should validate_length_of(:body).is_at_least(10) }
 
   it { should have_many :answers }
+  it { should have_many(:answers).dependent(:destroy) }
 
 end
