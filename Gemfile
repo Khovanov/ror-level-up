@@ -42,5 +42,10 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
 end
 
+group :test do
+  gem "shoulda-matchers", ">= 3.0.0",
+    require: false
+end
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
