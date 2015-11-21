@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
   describe 'GET #index' do 
     let(:questions) {create_list(:question, 2)}
-    
+
     before do 
       # @questions = FactoryGirl.create_list(:question, 2)
       # @questions = create_list(:question, 2)
@@ -42,7 +42,20 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders new view' do 
       expect(response).to render_template :new
     end
-    
+  end
+
+  describe 'GET #edit' do
+    let(:question) {create(:question)}
+
+    before {get :edit, id: question }
+
+    it 'assigns the requested question to @question' do 
+      expect(assigns(:question)).to eq question
+    end 
+
+    it 'renders edit view' do 
+      expect(response).to render_template :edit
+    end   
   end
 end
 
