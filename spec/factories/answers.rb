@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :answer do
+    question nil
     body "My Answer length is more than 10 symbols"
   end
 
