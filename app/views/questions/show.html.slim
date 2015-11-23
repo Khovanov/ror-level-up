@@ -1,9 +1,5 @@
 h1 Question
-
-p
-  strong 
-    = @question.title
-p
-  = @question.body
- 
-= link_to 'Back to list', questions_path  
+= link_to 'Back to list', questions_path 
+p: strong = @question.title
+p = @question.body
+= link_to 'Edit', edit_question_path(@question) 
