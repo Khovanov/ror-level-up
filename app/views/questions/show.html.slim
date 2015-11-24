@@ -3,3 +3,15 @@ h1 Question
 p: strong = @question.title
 p = @question.body
 = link_to 'Edit', edit_question_path(@question) 
+hr
+
+h2 Answers
+- unless @question.answers.empty?
+  ul
+    = render @question.answers
+- else
+  p No answers found.
+
+h3 Add answer
+= render 'answers/form' 
+
