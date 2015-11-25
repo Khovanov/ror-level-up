@@ -1,0 +1,16 @@
+h1 Questions list
+
+= link_to 'Ask your question', new_question_path
+
+- unless @questions.empty?
+  table
+    tr
+      th Titles
+      th colspan="2"
+
+    - @questions.each do |question| 
+      tr
+        td = question.title 
+        td = link_to 'Details', question_path(question) 
+- else
+  p No questions found.  
