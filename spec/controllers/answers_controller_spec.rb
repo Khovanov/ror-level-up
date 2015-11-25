@@ -12,8 +12,8 @@ RSpec.describe AnswersController, type: :controller do
           post :create, 
                 answer: attributes_for(:answer),
                 question_id: question 
-        end.to change(Answer, :count).by(1)
-        # change(question.answers, :count)
+        end.to change(question.answers, :count).by(1)
+        # change(Answer, :count)
         # change { question.answers.count }
       end
       it 'redirect to #show Question' do
