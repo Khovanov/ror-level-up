@@ -1,5 +1,10 @@
 h1 Questions list
-
+- if current_user
+  =' link_to 'Log out', destroy_user_session_path, method: :delete
+- else
+  =' link_to 'Log in', new_user_session_path
+  =' link_to 'Register', new_user_registration_path
+hr  
 = link_to 'Ask your question', new_question_path
 
 - unless @questions.empty?
