@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :edit, :create, :update]
-  # before_action :authenticate_user!, except: [:show, :index]
-  before_action :load_question, only: [:show, :edit, :update]
+  before_action :authenticate_user!, except: [:show, :index]
+  before_action :load_question, only: [:show, :edit, :update, :destroy]
   def index 
     @questions = Question.all
   end
@@ -18,7 +17,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.create(question_params)
-
+    # @question = current_user.questions.create(question_params)
     if @question.save
       redirect_to @question
     else
@@ -34,6 +33,16 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def destroy
+    if current_user == @question.user 
+      @question.destroy
+      redirect_to questions_path
+    else
+      # redirect_to question_path(@question)
+      redirect_to @question
+    end
+  end
+
   private
 
   def load_question
@@ -41,6 +50,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body).merge(user: current_user)
   end
 end

@@ -38,6 +38,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to redirect_to question_path(question)
       end
     end
-  end 
+  end
 end
 
