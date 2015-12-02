@@ -16,7 +16,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.create(question_params)
+    @question = Question.new(question_params.merge(user: current_user))
     # @question = current_user.questions.create(question_params)
     if @question.save
       redirect_to @question
@@ -50,6 +50,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body).merge(user: current_user)
+    params.require(:question).permit(:title, :body)
   end
 end

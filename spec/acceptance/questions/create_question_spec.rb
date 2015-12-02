@@ -19,6 +19,8 @@ feature 'Create Question' , %q{
     click_on 'Create'
     # save_and_open_page
     expect(page).to have_content 'Your question successfully created.'
+    expect(page).to have_content 'Test question'
+    expect(page).to have_content 'Test text body'
     # expect(current_path).to eq question_path(user.questions.last)
   end
 

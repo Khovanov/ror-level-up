@@ -17,6 +17,15 @@ RSpec.describe AnswersController, type: :controller do
         # change(Answer, :count)
         # change { question.answers.count }
       end
+
+      it 'checks that the Answer belongs to the User' do
+        expect do 
+           post :create, 
+                answer: attributes_for(:answer),
+                question_id: question 
+        end.to change(@user.answers, :count).by(1)
+      end
+
       it 'redirect to #show Question' do
         post :create, answer: attributes_for(:answer), question_id: question
         expect(response).to redirect_to question_path(question)

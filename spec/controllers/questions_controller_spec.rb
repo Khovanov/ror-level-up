@@ -71,6 +71,13 @@ RSpec.describe QuestionsController, type: :controller do
         # expect(Question.count).to eq count + 1
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
       end
+
+      it 'checks that the Question belongs to the User' do
+        expect do 
+          post :create, question: attributes_for(:question) 
+        end.to change(@user.questions, :count).by(1)
+      end
+
       it 'redirect to show view' do
         post :create, question: attributes_for(:question)
         expect(response).to redirect_to question_path(assigns(:question))
