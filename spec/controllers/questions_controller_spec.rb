@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) {create(:question)}
+  # let(:user) { create :user }
+  # let(:question) {create :question, user: user}
+  let(:question) {create :question}
+
   describe 'GET #index' do 
     let(:questions) {create_list(:question, 2)}
 
@@ -32,6 +35,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do 
+    login_user
     before {get :new}
 
     it 'assigns a new Question to @question' do
@@ -44,6 +48,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    login_user
     before {get :edit, id: question }
 
     it 'assigns the requested question to @question' do 
@@ -56,6 +61,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    login_user
     context 'with valid attributes' do 
       it 'saves new question in the database' do
         # post :create, question: {title: 'some title', body: 'some body'}
@@ -65,6 +71,13 @@ RSpec.describe QuestionsController, type: :controller do
         # expect(Question.count).to eq count + 1
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
       end
+
+      it 'checks that the Question belongs to the User' do
+        expect do 
+          post :create, question: attributes_for(:question) 
+        end.to change(@user.questions, :count).by(1)
+      end
+
       it 'redirect to show view' do
         post :create, question: attributes_for(:question)
         expect(response).to redirect_to question_path(assigns(:question))
@@ -84,6 +97,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    login_user
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do 
         patch :update, id: question, question: attributes_for(:question)
@@ -114,6 +128,20 @@ RSpec.describe QuestionsController, type: :controller do
       it 're-render edit view' do
         expect(response).to render_template :edit
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    login_user
+    before { @question = create :question, user: @user }
+
+    it 'delete question' do
+      expect { delete :destroy, id: @question }.to change(Question, :count).by(-1)
+    end
+
+    it 'redirect to index view' do
+      delete :destroy, id: @question
+      expect(response).to redirect_to questions_path
     end
   end
 end
