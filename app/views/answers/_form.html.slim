@@ -1,4 +1,4 @@
-= form_for([@question, @answer]) do |f|
+= form_for [@question, @answer], remote:true do |f|
   /= form_for([@question, @question.answers.build]) do |f| 
   = f.label :body 
   br

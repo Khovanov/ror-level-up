@@ -46,6 +46,8 @@ group :test do
   gem 'shoulda-matchers', '>= 3.0.0', require: false
   gem 'capybara'
   gem 'launchy' 
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 gem 'slim-rails'

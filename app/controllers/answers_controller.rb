@@ -7,7 +7,7 @@ class AnswersController < ApplicationController
     # @answer = @question.answers.build(answer_params)
     # @answer.save
     @question.answers.create(answer_params)
-    redirect_to @question
+    # redirect_to @question
   end
 
   def destroy

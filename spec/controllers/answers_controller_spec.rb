@@ -12,7 +12,7 @@ RSpec.describe AnswersController, type: :controller do
         expect do 
           post :create, 
                 answer: attributes_for(:answer),
-                question_id: question 
+                question_id: question, format: :js 
         end.to change(question.answers, :count).by(1)
         # change(Answer, :count)
         # change { question.answers.count }
@@ -22,14 +22,14 @@ RSpec.describe AnswersController, type: :controller do
         expect do 
            post :create, 
                 answer: attributes_for(:answer),
-                question_id: question 
+                question_id: question, format: :js  
         end.to change(@user.answers, :count).by(1)
       end
 
-      it 'redirect to #show Question' do
-        post :create, answer: attributes_for(:answer), question_id: question
-        expect(response).to redirect_to question_path(question)
-        # expect(response).to render_template :create
+      it 'render create template' do
+        post :create, answer: attributes_for(:answer), question_id: question, format: :js 
+        # expect(response).to redirect_to question_path(question)
+        expect(response).to render_template :create
       end
     end
 
@@ -38,13 +38,14 @@ RSpec.describe AnswersController, type: :controller do
         expect do 
           post :create, 
                 answer: attributes_for(:invalid_answer), 
-                question_id: question 
+                question_id: question, format: :js  
         end.to_not change(Answer, :count)
       end
 
-      it 'redirect to #show Question' do
-        post :create, answer: attributes_for(:invalid_answer), question_id: question
-        expect(response).to redirect_to question_path(question)
+      it 'render create template' do
+        post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js 
+        # expect(response).to redirect_to question_path(question)
+        expect(response).to render_template :create
       end
     end
   end
