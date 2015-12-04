@@ -11,8 +11,9 @@ hr
 h2 Answers
 - unless @question.answers.empty?
   ul.answers
-    / = render @question.answers
-    = render 'answers'
+    /- @question.answers.each do |answer|
+    / = render 'answers'
+    = render @question.answers
 - else
   p No answers found.
 
