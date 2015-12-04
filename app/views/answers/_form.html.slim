@@ -1,6 +1,7 @@
-= form_for([@question, @question.answers.build]) do |f| 
+= form_for([@question, @answer]) do |f|
+  /= form_for([@question, @question.answers.build]) do |f| 
   = f.label :body 
   br
   = f.text_area :body 
   br
-  = f.submit 
+  = f.submit 'Create Answer'

@@ -19,7 +19,9 @@ feature 'Create answer', %q{
     click_on 'Create Answer'
 
     expect(current_path).to eq question_path(question)
-    expect(page).to have_content 'Answer text body'
+    within '.answers' do
+      expect(page).to have_content 'Answer text body'
+    end
   end
 
   scenario 'Non-registered user creates answer'  do  

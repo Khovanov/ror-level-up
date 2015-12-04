@@ -10,8 +10,10 @@ hr
 
 h2 Answers
 - unless @question.answers.empty?
-  ul
-    = render @question.answers
+  ul.answers
+    /= render @question.answers
+    - @question.answers.each do |answer|
+      li = answer.body
 - else
   p No answers found.
 

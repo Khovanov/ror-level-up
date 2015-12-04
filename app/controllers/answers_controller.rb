@@ -4,8 +4,9 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:destroy]
 
   def create
-    @answer = @question.answers.create(answer_params)
-    @answer.save
+    # @answer = @question.answers.build(answer_params)
+    # @answer.save
+    @question.answers.create(answer_params)
     redirect_to @question
   end
 
