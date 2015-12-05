@@ -9,7 +9,7 @@ feature 'Create answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
 
-  scenario 'Authenticated user creates answer'  do  
+  scenario 'Authenticated user creates answer', js: true do  
     sign_in(user)
 
     # visit root_path
@@ -19,7 +19,9 @@ feature 'Create answer', %q{
     click_on 'Create Answer'
 
     expect(current_path).to eq question_path(question)
-    expect(page).to have_content 'Answer text body'
+    within '.answers' do
+      expect(page).to have_content 'Answer text body'
+    end
   end
 
   scenario 'Non-registered user creates answer'  do  

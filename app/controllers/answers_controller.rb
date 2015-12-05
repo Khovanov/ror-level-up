@@ -4,9 +4,10 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:destroy]
 
   def create
-    @answer = @question.answers.create(answer_params)
-    @answer.save
-    redirect_to @question
+    # @answer = @question.answers.build(answer_params)
+    # @answer.save
+    @answer = @question.answers.create(answer_params.merge(user: current_user))
+    # redirect_to @question
   end
 
   def destroy
@@ -32,6 +33,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body).merge(user: current_user)
+    params.require(:answer).permit(:body)
   end
 end

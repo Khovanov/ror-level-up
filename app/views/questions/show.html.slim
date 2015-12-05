@@ -9,8 +9,11 @@ p = @question.body
 hr
 
 h2 Answers
-- unless @question.answers.empty?
-  ul
+/- unless @question.answers.empty?
+- if @question.answers.present?
+  ul.answers
+    /- @question.answers.each do |answer|
+    / = render 'answers'
     = render @question.answers
 - else
   p No answers found.
