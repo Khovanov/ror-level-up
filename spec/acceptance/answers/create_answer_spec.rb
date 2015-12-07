@@ -24,6 +24,15 @@ feature 'Create answer', %q{
     end
   end
 
+  scenario 'User try creates invalid answer', js: true do  
+    sign_in(user)
+
+    visit question_path(question)
+    click_on 'Create Answer'
+
+    expect(page).to have_content "Body can't be blank"
+  end
+
   scenario 'Non-registered user creates answer'  do  
     visit question_path(question)
     fill_in 'Body', with: 'Answer text body'

@@ -9,8 +9,8 @@ p = @question.body
 hr
 
 h2 Answers
-/- unless @question.answers.empty?
-- if @question.answers.present?
+/- if @question.answers.present?
+- unless @question.answers.empty?
   ul.answers
     /- @question.answers.each do |answer|
     / = render 'answers'
@@ -19,5 +19,6 @@ h2 Answers
   p No answers found.
 
 h3 Add answer
+.answer-errors
 = render 'answers/form' 
 
