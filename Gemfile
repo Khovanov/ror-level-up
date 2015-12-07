@@ -46,7 +46,9 @@ group :test do
   gem 'shoulda-matchers', '>= 3.0.0', require: false
   gem 'capybara'
   gem 'launchy' 
-  gem 'selenium-webdriver'
+  # gem 'selenium-webdriver'
+  # gem 'capybara-webkit'
+  gem 'poltergeist'
   gem 'database_cleaner'
 end
 
