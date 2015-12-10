@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question
-  before_action :load_answer, only: [:destroy]
+  before_action :load_answer, only: [:destroy, :update ]
 
   def create
     # @answer = @question.answers.build(answer_params)
@@ -10,13 +10,20 @@ class AnswersController < ApplicationController
     # redirect_to @question
   end
 
+  def update
+   if current_user == @answer.user     
+      @answer.update(answer_params)
+    else
+      redirect_to @question
+    end
+  end
+
   def destroy
     if current_user == @answer.user 
       @answer.destroy
-      redirect_to @question
     else
-      # redirect_to question_path(@question)
       redirect_to @question
+      # redirect_to question_path(@question)
     end
   end
 

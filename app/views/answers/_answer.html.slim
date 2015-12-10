@@ -1,1 +1,21 @@
-li = answer.body 
+- if answer.persisted?
+  div[class="answer-#{answer.id}"]
+    p = answer.body 
+    - if user_signed_in?
+      -if answer.user == current_user
+        p 
+          => link_to 'Edit', '', 
+                      class: 'edit-answer-link', 
+                      data: { answer_id: answer.id} 
+          => link_to 'Delete', 
+                      [answer.question, answer], 
+                      class: 'delete-answer-link',
+                      data: { answer_id: answer.id, confirm: 'Sure?' }, 
+                      remote: true, 
+                      method: :delete
+        = form_for [@question, answer], 
+                    remote: true, 
+                    html: { id: "edit-answer-#{answer.id}" } do |f|
+          p = f.label :body, 'Answer'
+          p = f.text_area :body
+          p = f.submit 'Save'

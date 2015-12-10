@@ -1,0 +1,8 @@
+$('.answer-errors').empty();
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+    $('.answer-errors').append("<%= j render 'error', message: message %>");
+  <% end %>
+<% else %>
+  $('.answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>');
+<% end %>
