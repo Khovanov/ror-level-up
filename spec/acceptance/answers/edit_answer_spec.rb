@@ -40,7 +40,7 @@ feature 'Edit answer', %q{
       end     
     end
 
-    scenario 'author of answer try to edit his answer', js: true do
+    scenario 'try edit answer with valid params', js: true do
       answer
       visit question_path(question)
       within '.answers' do
@@ -52,5 +52,7 @@ feature 'Edit answer', %q{
         expect(page).to_not have_selector 'textarea'
       end   
     end
+
+    scenario 'try edit answer with invalid params'
   end
 end

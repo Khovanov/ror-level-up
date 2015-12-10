@@ -66,68 +66,128 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    login_user
+    let(:post_create_question) do 
+      post :create, 
+            question: attributes_for(:question) 
+    end
+    let(:post_create_invalid_question) do 
+      post :create, 
+            question: attributes_for(:invalid_question) 
+    end
+    context 'when user unauthenticated' do
+      it 'does not save the question' do
+        expect { post_create_question }.to_not change(Question, :count)
+      end
+    end
+
     context 'with valid attributes' do 
+      login_user
+
       it 'saves new question in the database' do
         # post :create, question: {title: 'some title', body: 'some body'}
         # post :create, question: FactoryGirl.attributes_for(:question)
         # count = Question.count
         # post :create, question: attributes_for(:question)
         # expect(Question.count).to eq count + 1
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect { post_create_question }.to change(Question, :count).by(1)
       end
 
-      it 'checks that the Question belongs to the User' do
-        expect do 
-          post :create, question: attributes_for(:question) 
-        end.to change(user.questions, :count).by(1)
+      it 'checks that the question belongs to the user' do
+        expect { post_create_question }.to change(user.questions, :count).by(1)
       end
 
       it 'redirect to show view' do
-        post :create, question: attributes_for(:question)
+        post_create_question
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
     context 'with invalid attributes' do
+      login_user      
       it 'does not save the question' do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect { post_create_invalid_question }.to_not change(Question, :count)
       end
 
       it 're-renders new view' do
-        post :create, question: attributes_for(:invalid_question)
+        post_create_invalid_question
         expect(response).to render_template :new
       end
     end
   end
 
   describe 'PATCH #update' do
-    login_user
-    context 'with valid attributes' do
+    let(:patch_update_question_attr) do
+      patch :update, 
+            id: question, 
+            question: attributes_for(:question)
+    end
+    let(:patch_update_question_body) do
+      patch :update, 
+            id: question, 
+            question: { title: 'some test title', body: 'some test body'}     
+    end
+
+    context 'when user unauthenticated' do
+      it 'not change question attributes' do
+        patch_update_question_body
+        question.reload
+        expect(question.title).to_not eq 'some test title'
+        expect(question.body).to_not eq 'some test body'
+      end
+    end
+
+    context 'when user try edit his question' do 
+      login_user
+
       it 'assigns the requested question to @question' do 
-        patch :update, id: question, question: attributes_for(:question)
+        patch_update_question_attr
         expect(assigns(:question)).to eq question
       end 
 
       it 'change question attributes' do
-        patch :update, id: question, question: { title: 'some test title', body: 'some test body'}
+        patch_update_question_body
         question.reload
         expect(question.title).to eq 'some test title'
         expect(question.body).to eq 'some test body'
       end
 
       it 'redirect to the updated question' do
-        patch :update, id: question, question: attributes_for(:question) 
+        patch_update_question_attr 
         expect(response).to redirect_to question
       end
     end
 
+    context 'when user try edit question another user' do
+      login_user
+      before do
+        patch :update, 
+              id: question_another_user, 
+              question: { title: 'some test title', body: 'some test body'} 
+      end
+
+      it 'not change question attributes' do
+        question_another_user.reload
+        expect(question_another_user.title).to_not eq 'some test title'
+        expect(question_another_user.body).to_not eq 'some test body'
+      end
+
+      it 'redirect to the question' do
+        expect(response).to redirect_to question_another_user
+      end
+    end
+
     context 'with invalid attributes' do
-      before {patch :update, id: question, question: { title: 'some test title', body: nil}}
-      it 'does not change question attributes' do
+      login_user
+      before do
+        patch :update, 
+              id: question, 
+              question: { title: nil, body: nil}
+      end
+
+      it 'not change question attributes' do
         question.reload
-        expect(question.title).to eq 'MyTitle is to Long'
-        expect(question.body).to eq 'MyText it more 10 symbols'     
+        expect(question.title).to_not eq nil
+        expect(question.body).to_not eq nil     
       end
 
       it 're-render edit view' do
@@ -137,16 +197,38 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    login_user
-    before { question }
+    let(:delete_destroy_question) do
+      delete :destroy, 
+              id: question
+    end
+    before {question; question_another_user}
 
-    it 'delete question' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    context 'when user unauthenticated' do
+      it 'does not delete question' do
+        expect { delete_destroy_question }.to_not change(Question, :count)
+      end
     end
 
-    it 'redirect to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'when user try delete his question' do 
+      login_user
+      it 'delete question' do
+        expect { delete_destroy_question }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to index view' do
+        delete_destroy_question
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'when user try delete question another user' do
+      login_user
+      it 'does not delete question' do
+        expect do
+          delete :destroy, 
+                  id: question_another_user 
+        end.to_not change(Question, :count)
+      end
     end
   end
 end
