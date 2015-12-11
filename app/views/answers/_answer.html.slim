@@ -1,5 +1,7 @@
 - if answer.persisted?
-  div[class="answer-#{answer.id}"]
+  div[class="answer" id="answer-#{answer.id}"]
+    -if answer.is_best
+      p The best answer 
     p = answer.body 
     - if user_signed_in?
       -if answer.user == current_user
@@ -19,3 +21,12 @@
           p = f.label :body, 'Answer'
           p = f.text_area :body
           p = f.submit 'Save'
+      -if @question.user == current_user  
+        -unless answer.is_best  
+          => link_to 'Best answer', 
+                      [:set_best, answer.question, answer],
+                      method: :patch,
+                      remote: true,
+                      id: "best-answer-link-#{answer.id}",
+                      class: 'best-answer-link', 
+                      data: { answer_id: answer.id} 

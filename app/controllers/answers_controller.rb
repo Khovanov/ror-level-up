@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question
-  before_action :load_answer, only: [:destroy, :update ]
+  before_action :load_answer, only: [:destroy, :update, :set_best]
 
   def create
     # @answer = @question.answers.build(answer_params)
@@ -11,7 +11,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-   if current_user == @answer.user     
+    if current_user == @answer.user     
       @answer.update(answer_params)
     else
       redirect_to @question
@@ -25,6 +25,10 @@ class AnswersController < ApplicationController
       redirect_to @question
       # redirect_to question_path(@question)
     end
+  end
+
+  def set_best
+    @answer.set_best if @question.user == current_user
   end
 
   private

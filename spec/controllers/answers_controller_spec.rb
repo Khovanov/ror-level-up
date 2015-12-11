@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
 # describe AnswersController do
   let(:user) { create :user }
-  let(:question) { create :question }
+  let(:question) { create :question, user: user }
+  let(:question_another_user) { create :question }
   let(:answer) { create :answer, question: question, user: user }
   let(:answer_another_user) { create(:answer, question: question)  }
+  let(:answer_another_question) { create(:answer, question: question_another_user)  }
    
   describe 'POST #create' do
     let(:post_create_answer) do 
@@ -147,6 +149,52 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render updated template' do
         expect(response).to render_template :update
+      end
+    end
+  end
+
+  describe 'PATCH #set_best' do
+    let(:patch_set_best_answer) do
+      patch :set_best, 
+            id: answer, 
+            question_id: question, 
+            format: :js
+    end
+
+    context 'when user unauthenticated' do
+      it 'not set best answer' do
+        expect do
+          patch_set_best_answer
+          answer.reload
+        end.to_not change(answer, :is_best)
+      end
+    end
+    
+    context 'when author question try set best answer' do 
+      login_user
+      before { patch_set_best_answer }
+      
+      it 'set best answer' do
+        answer.reload
+        expect(answer.is_best).to eq true
+      end
+
+      it 'render template set_best answer' do
+        expect(response).to render_template :set_best
+      end
+    end
+
+    context 'when non author question try set best answer' do
+      login_user
+      
+      it 'not set best answer' do
+        expect do
+          patch :set_best, 
+                id: answer_another_question, 
+                question_id: question_another_user, 
+                format: :js
+          answer_another_question.reload
+        end.to_not change(answer_another_question, :is_best)
       end
     end
   end
