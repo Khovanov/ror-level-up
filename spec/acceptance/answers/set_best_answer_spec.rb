@@ -9,7 +9,7 @@ feature 'Set best answer', %q{
   given(:user) { create(:user) }  
   given(:question) { create :question, user: user }
   given(:answer) { create(:answer, question: question)  }
-  given(:answers) { create_list(:answer, 3, question: question)  }
+  given(:answers) { create_list(:answer, 2, question: question)  }
 
   given(:question_another_user) { create :question }
   given(:answer_another_question) { create(:answer, question: question_another_user)  }
@@ -55,20 +55,21 @@ feature 'Set best answer', %q{
 
     scenario 'best answer is first in the list', js: true do
       answers
+      answers.last.set_best
       visit question_path(question)
-      page.all('a', text: 'Best answer').first.click
-      page.all('a', text: 'Best answer').last.click
-      # Capybara.default_max_wait_time = 10
-      expect(page.all('div.answer').first).to have_content 'The best answer'
+      # expect(page.all('div.answer').first).to have_content 'The best answer'
+      within '.answer:first-child' do     
+        expect(page).to have_content 'The best answer'
+      end
     end
 
     scenario 'best answer is only one', js: true do
       answers
+      answers.last.set_best
       visit question_path(question)
-      page.all('a', text: 'Best answer').first.click
-      # update .answers by AJAX
-      page.all('a', text: 'Best answer').last.click
-      # update .answers by AJAX
+      click_on 'Best answer'
+      # page.all('a', text: 'Best answer').first.click
+      # page.all('a', text: 'Best answer').last.click
       expect(page).to have_content('The best answer', count: 1)
     end
   end

@@ -4,8 +4,8 @@
  
 # $ ->
 edit_answer = ->
-  $('.edit-answer-link').click (e) ->
-  # $('.answers').on 'click', '.edit-answer-link', (e) -> 
+  # $('.edit-answer-link').click (e) ->
+  $('.answers').on 'click', '.edit-answer-link', (e) -> 
     e.preventDefault();
     $(this).hide();
     answer_id = $(this).data('answerId');

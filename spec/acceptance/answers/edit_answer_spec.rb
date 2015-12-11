@@ -53,6 +53,16 @@ feature 'Edit answer', %q{
       end   
     end
 
-    scenario 'try edit answer with invalid params'
+    scenario 'try edit answer with invalid params', js: true do
+      answer
+      visit question_path(question)
+      within '.answers' do
+        click_on 'Edit'
+        fill_in 'Answer', with: nil
+        click_on 'Save'
+        expect(page).to have_content answer.body
+        expect(page).to have_selector 'textarea'
+      end  
+    end
   end
 end
