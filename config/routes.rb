@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers do
-      patch 'set_best', on: :member
+      patch 'best', on: :member
     end   
   end
   # The priority is based upon order of creation: first created -> highest priority.

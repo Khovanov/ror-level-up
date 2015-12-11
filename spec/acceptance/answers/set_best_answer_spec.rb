@@ -55,7 +55,7 @@ feature 'Set best answer', %q{
 
     scenario 'best answer is first in the list', js: true do
       answers
-      answers.last.set_best
+      answers.last.best!
       visit question_path(question)
       # expect(page.all('div.answer').first).to have_content 'The best answer'
       within '.answer:first-child' do     
@@ -65,7 +65,7 @@ feature 'Set best answer', %q{
 
     scenario 'best answer is only one', js: true do
       answers
-      answers.last.set_best
+      answers.last.best!
       visit question_path(question)
       click_on 'Best answer'
       # page.all('a', text: 'Best answer').first.click

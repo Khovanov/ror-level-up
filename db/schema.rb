@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20151210174924) do
     t.datetime "updated_at",                  null: false
     t.integer  "question_id"
     t.integer  "user_id"
-    t.boolean  "is_best",     default: false
+    t.boolean  "best",        default: false
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree

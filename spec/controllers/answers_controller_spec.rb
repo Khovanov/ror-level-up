@@ -153,9 +153,9 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'PATCH #set_best' do
-    let(:patch_set_best_answer) do
-      patch :set_best, 
+  describe 'PATCH #best' do
+    let(:patch_best_answer) do
+      patch :best, 
             id: answer, 
             question_id: question, 
             format: :js
@@ -164,23 +164,23 @@ RSpec.describe AnswersController, type: :controller do
     context 'when user unauthenticated' do
       it 'not set best answer' do
         expect do
-          patch_set_best_answer
+          patch_best_answer
           answer.reload
-        end.to_not change(answer, :is_best)
+        end.to_not change(answer, :best)
       end
     end
     
     context 'when author question try set best answer' do 
       login_user
-      before { patch_set_best_answer }
+      before { patch_best_answer }
       
       it 'set best answer' do
         answer.reload
-        expect(answer.is_best).to eq true
+        expect(answer.best?).to eq true
       end
 
-      it 'render template set_best answer' do
-        expect(response).to render_template :set_best
+      it 'render template best answer' do
+        expect(response).to render_template :best
       end
     end
 
@@ -189,12 +189,12 @@ RSpec.describe AnswersController, type: :controller do
       
       it 'not set best answer' do
         expect do
-          patch :set_best, 
+          patch :best, 
                 id: answer_another_question, 
                 question_id: question_another_user, 
                 format: :js
           answer_another_question.reload
-        end.to_not change(answer_another_question, :is_best)
+        end.to_not change(answer_another_question, :best)
       end
     end
   end
