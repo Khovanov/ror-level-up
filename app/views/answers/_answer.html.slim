@@ -15,6 +15,7 @@
                       data: { answer_id: answer.id, confirm: 'Sure?' }, 
                       remote: true, 
                       method: :delete
+        .answer-errors              
         = form_for [@question, answer], 
                     remote: true, 
                     html: { id: "edit-answer-#{answer.id}" } do |f|

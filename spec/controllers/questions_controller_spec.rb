@@ -119,12 +119,14 @@ RSpec.describe QuestionsController, type: :controller do
     let(:patch_update_question_attr) do
       patch :update, 
             id: question, 
-            question: attributes_for(:question)
+            question: attributes_for(:question),
+            format: :js
     end
     let(:patch_update_question_body) do
       patch :update, 
             id: question, 
-            question: { title: 'some test title', body: 'some test body'}     
+            question: { title: 'some test title', body: 'some test body'},
+            format: :js    
     end
 
     context 'when user unauthenticated' do
@@ -151,9 +153,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'some test body'
       end
 
-      it 'redirect to the updated question' do
+      it 'render to the updated question' do
         patch_update_question_attr 
-        expect(response).to redirect_to question
+        expect(response).to render_template :update
       end
     end
 
@@ -162,17 +164,14 @@ RSpec.describe QuestionsController, type: :controller do
       before do
         patch :update, 
               id: question_another_user, 
-              question: { title: 'some test title', body: 'some test body'} 
+              question: { title: 'some test title', body: 'some test body'},
+              format: :js 
       end
 
       it 'not change question attributes' do
         question_another_user.reload
         expect(question_another_user.title).to_not eq 'some test title'
         expect(question_another_user.body).to_not eq 'some test body'
-      end
-
-      it 'redirect to the question' do
-        expect(response).to redirect_to question_another_user
       end
     end
 
@@ -181,7 +180,8 @@ RSpec.describe QuestionsController, type: :controller do
       before do
         patch :update, 
               id: question, 
-              question: { title: nil, body: nil}
+              question: { title: nil, body: nil},
+              format: :js
       end
 
       it 'not change question attributes' do
@@ -190,8 +190,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to_not eq nil     
       end
 
-      it 're-render edit view' do
-        expect(response).to render_template :edit
+      it 'render template update' do
+        expect(response).to render_template :update
       end
     end
   end

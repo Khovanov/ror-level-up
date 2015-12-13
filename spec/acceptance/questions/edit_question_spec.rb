@@ -12,7 +12,9 @@ feature 'Edit Question' , %q{
 
   scenario 'Unauthenticated user try edit question' do 
     visit question_path(question)
-    expect(page).to_not have_link 'Edit'
+    within '.question' do
+      expect(page).to_not have_link 'Edit'
+    end
   end
 
   describe 'Authenticated user' do
@@ -20,35 +22,43 @@ feature 'Edit Question' , %q{
 
     scenario 'non author of question not sees link to edit' do 
       visit question_path(question_another_user)
-      expect(page).to_not have_link 'Edit'     
+      within '.question' do
+        expect(page).to_not have_link 'Edit'
+      end    
     end
     
     scenario 'author of question sees link to edit' do
       visit question_path(question)
-      expect(page).to have_link 'Edit'      
+      within '.question' do
+        expect(page).to have_link 'Edit'  
+      end    
     end
 
-    scenario 'try to edit question with valid params' do
+    scenario 'try to edit question with valid params', js: true do
       visit question_path(question)
-      click_on 'Edit'
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'Test text body'
-      click_on 'Update Question'
-      expect(page).to_not have_content question.title
-      expect(page).to_not have_content question.body
-      expect(page).to have_content 'Test question'
-      expect(page).to have_content 'Test text body'
+      within '.question' do
+        click_on 'Edit'
+        fill_in 'Title', with: 'Test question'
+        fill_in 'Body', with: 'Test text body'
+        click_on 'Update Question'
+        expect(page).to_not have_content question.title
+        expect(page).to_not have_content question.body
+        expect(page).to have_content 'Test question'
+        expect(page).to have_content 'Test text body'
+        expect(page).to_not have_selector 'textarea'
+      end
     end
 
-    scenario 'try to edit question with invalid params' do
+    scenario 'try to edit question with invalid params', js: true do
       visit question_path(question)
-      click_on 'Edit'
-      fill_in 'Title', with: nil
-      fill_in 'Body', with: nil      
-      click_on 'Update Question'
-      expect(page).to have_content "Title can't be blank" 
-      expect(page).to have_content "Body can't be blank" 
+      within '.question' do      
+        click_on 'Edit'
+        fill_in 'Title', with: nil
+        fill_in 'Body', with: nil      
+        click_on 'Update Question'
+        expect(page).to have_content "Title can't be blank" 
+        expect(page).to have_content "Body can't be blank" 
+      end
     end
-
   end
 end

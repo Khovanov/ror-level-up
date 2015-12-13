@@ -12,8 +12,4 @@ class Answer < ActiveRecord::Base
       update!(best: true)
     end
   end  
-
-  def best?
-    best
-  end  
 end

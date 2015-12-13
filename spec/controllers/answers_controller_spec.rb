@@ -126,11 +126,6 @@ RSpec.describe AnswersController, type: :controller do
         answer_another_user.reload
         expect(answer_another_user.body).to_not eq 'updated answer body'
       end
-
-      it 'redirect to #show question' do
-        # expect(response).to redirect_to question_path(question)
-        expect(response).to redirect_to question
-      end
     end
 
     context 'with invalid attributes' do

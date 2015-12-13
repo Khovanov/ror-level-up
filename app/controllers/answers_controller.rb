@@ -13,17 +13,12 @@ class AnswersController < ApplicationController
   def update
     if current_user == @answer.user     
       @answer.update(answer_params)
-    else
-      redirect_to @question
     end
   end
 
   def destroy
     if current_user == @answer.user 
       @answer.destroy
-    else
-      redirect_to @question
-      # redirect_to question_path(@question)
     end
   end
 
