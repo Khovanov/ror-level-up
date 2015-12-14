@@ -2,6 +2,11 @@ h1 Question
 = link_to 'Back to list', questions_path 
 .question
   = render 'question'
+
+p Attachments:
+ul
+  - @question.attachments.each do |a|
+    li = link_to a.file.filename, a.file.url
 hr
 
 h2 Answers
