@@ -77,3 +77,5 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+# ActiveRecord::Base.logger = Logger.new(STDOUT)
