@@ -1,17 +1,13 @@
 h1 Question
-
-p Your question successfully created.
-
 = link_to 'Back to list', questions_path 
-p: strong = @question.title
-p = @question.body
-= link_to 'Edit', edit_question_path(@question) 
+.question
+  = render 'question'
 hr
 
 h2 Answers
-/- unless @question.answers.empty?
-- if @question.answers.present?
-  ul.answers
+/- if @question.answers.present?
+- unless @question.answers.empty?
+  .answers
     /- @question.answers.each do |answer|
     / = render 'answers'
     = render @question.answers
@@ -19,5 +15,6 @@ h2 Answers
   p No answers found.
 
 h3 Add answer
+.answer-errors
 = render 'answers/form' 
 
