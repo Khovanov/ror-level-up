@@ -6,6 +6,6 @@ edit_question = ->
   $('.question').on 'click', '.edit-question-link', (e) -> 
     e.preventDefault();
     $(this).hide();
-    $('form#edit-question-form').show();
+    $('.edit-question-form').show();
 
 $(document).on('page:update', edit_question) 

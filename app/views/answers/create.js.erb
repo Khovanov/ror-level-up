@@ -1,9 +1,7 @@
-$('.answer-errors').empty();
 <% if @answer.errors.present? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').append("<%= j render 'error', message: message %>");
-  <% end %>
+  $('#add-answer-errors').html("<%= j render 'shared/error', resource: @answer %>");
 <% else %>
+  $('#add-answer-errors').empty();  
   $('.answers').append('<%= j render @answer %>');
   $('#answer_body').val('');
 <% end %>

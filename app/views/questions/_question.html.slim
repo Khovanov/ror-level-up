@@ -1,17 +1,18 @@
 p: strong = @question.title
 p = @question.body
+= render 'attachments/attachment_list', resource: @question
+
 - if user_signed_in?
   -if @question.user == current_user 
     / # = link_to 'Edit', edit_question_path(@question)
-    p
-      => link_to 'Edit', '', 
-                  class: 'edit-question-link'
     .question-errors
-    = form_for @question, 
-                remote: true, 
-                html: { id: 'edit-question-form' } do |f|
-      p = f.label :title
-      p = f.text_area :title
-      p = f.label :body 
-      p = f.text_area :body
-      p = f.submit 
+      = render 'shared/error', resource: @question    
+    
+    => link_to 'Edit', '', class: 'edit-question-link'
+    => link_to 'Delete', 
+                [@question], 
+                class: 'delete-answer-link',
+                data: { question_id: @question.id, confirm: 'Sure?' }, 
+                method: :delete      
+    .edit-question-form
+      = render partial: 'questions/form', locals: {submit_text: 'Edit Question', remote: true}

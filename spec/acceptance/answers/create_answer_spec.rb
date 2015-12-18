@@ -11,7 +11,7 @@ feature 'Create answer', %q{
 
   scenario 'Unauthenticated user try creates answer'  do  
     visit question_path(question)
-    fill_in 'Body', with: 'Answer text body'
+    fill_in 'Answer', with: 'Answer text body'
     # save_and_open_page
     click_on 'Create Answer'
 
@@ -28,7 +28,7 @@ feature 'Create answer', %q{
     end
 
     scenario 'try creates valid answer', js: true do  
-      fill_in 'Body', with: 'Answer text body'
+      fill_in 'Answer', with: 'Answer text body'
       click_on 'Create Answer'
 
       expect(current_path).to eq question_path(question)

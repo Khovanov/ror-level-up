@@ -40,7 +40,7 @@ feature 'Edit Question' , %q{
         click_on 'Edit'
         fill_in 'Title', with: 'Test question'
         fill_in 'Body', with: 'Test text body'
-        click_on 'Update Question'
+        click_on 'Edit Question'
         expect(page).to_not have_content question.title
         expect(page).to_not have_content question.body
         expect(page).to have_content 'Test question'
@@ -55,7 +55,7 @@ feature 'Edit Question' , %q{
         click_on 'Edit'
         fill_in 'Title', with: nil
         fill_in 'Body', with: nil      
-        click_on 'Update Question'
+        click_on 'Edit Question'
         expect(page).to have_content "Title can't be blank" 
         expect(page).to have_content "Body can't be blank" 
       end

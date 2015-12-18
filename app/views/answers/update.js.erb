@@ -1,8 +1,6 @@
-$('.answer-errors').empty();
 <% if @answer.errors.present? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').append("<%= j render 'error', message: message %>");
-  <% end %>
-<% else %>
+  $('#edit-answer-errors-<%= @answer.id %>').html("<%= j render 'shared/error', resource: @answer %>");
+<% else %> 
+  $('#edit-answer-errors-<%= @answer.id %>').empty();   
   $('#answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>');
 <% end %>

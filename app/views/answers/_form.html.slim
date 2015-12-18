@@ -1,12 +1,6 @@
-= form_for [@question, @answer], remote:true do |f|
-  /= form_for([@question, @question.answers.build]) do |f| 
-  p
-    = f.label :body 
-  p
-    = f.text_area :body 
-  p Attachments:
-  = f.fields_for :attachments do |a|
-    = a.label :file
-    = a.file_field :file
-  p
-  = f.submit 'Create Answer'
+= form_for [answer.question, answer], remote:true do |f|
+  p = f.label :body , 'Answer'
+  = f.text_area :body 
+  .attachments
+    = render 'attachments/attachment_form', f: f
+  p = f.submit submit_text

@@ -1,0 +1,5 @@
+<% if @attachment.attachable_type == 'Question' %>
+  $('.question').html("<%= j render 'questions/question' %>");
+<% elsif @attachment.attachable_type == 'Answer' %>
+  $('#answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>'); 
+<% end %>

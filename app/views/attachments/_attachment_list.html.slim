@@ -1,0 +1,12 @@
+- if resource.attachments.present?
+  p Attachments:
+  - resource.attachments.each do |a|
+    p
+      => link_to a.file.filename, a.file.url
+      -if current_user == a.attachable.user
+        => link_to 'Remove file', 
+                    a, 
+                    # data: { attachment_id: a.id, confirm: 'Sure?' }, 
+                    data: { attachment_id: a.id }, 
+                    remote: true, 
+                    method: :delete 

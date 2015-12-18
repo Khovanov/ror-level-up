@@ -1,8 +1,5 @@
-$('.question-errors').empty();
 <% if @question.errors.present? %>
-  <% @question.errors.full_messages.each do |message| %>
-    $('.question-errors').append("<%= j render 'error', message: message %>");
-  <% end %>
-<% else %>
+  $('.question-errors').html("<%= j render 'shared/error', resource: @question %>");
+<% else %>  
   $('.question').html("<%= j render 'question' %>");
 <% end %>
