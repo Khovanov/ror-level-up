@@ -11,7 +11,7 @@ p = @question.body
     => link_to 'Edit', '', class: 'edit-question-link'
     => link_to 'Delete', 
                 [@question], 
-                class: 'delete-answer-link',
+                class: 'delete-question-link',
                 data: { question_id: @question.id, confirm: 'Sure?' }, 
                 method: :delete      
     .edit-question-form
