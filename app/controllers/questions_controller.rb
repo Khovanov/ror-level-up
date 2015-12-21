@@ -7,12 +7,12 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
-    @answer.attachments.build
+    # @answer.attachments.build
   end
 
   def new
     @question = Question.new
-    @question.attachments.build
+    # @question.attachments.build
   end
 
   def edit

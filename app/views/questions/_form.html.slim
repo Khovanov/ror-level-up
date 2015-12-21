@@ -3,6 +3,5 @@
   = f.text_field :title , placeholder: 'Title you question'
   p = f.label :body 
   = f.text_area :body, placeholder: 'Body you question'
-  .attachments
-    = render 'attachments/attachment_form', f: f
+  = render 'attachments/attachment_form', f: f
   p = f.submit submit_text

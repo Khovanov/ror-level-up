@@ -1,3 +1,9 @@
-  = f.fields_for :attachments do |att|
-    = render 'attachments/attachment_fields', f: att
-    = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/attachment_fields'
+= f.fields_for :attachments do |att|
+  = render 'attachments/attachment_fields', f: att
+.link
+  = link_to_add_association 'Add file', 
+                            f, 
+                            :attachments,
+                            { :'data-association-insertion-method' => :before, 
+                              partial: 'attachments/attachment_fields' }
+

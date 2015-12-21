@@ -1,7 +1,7 @@
 - if resource.attachments.present?
   p Attachments:
   - resource.attachments.each do |a|
-    p
+    p[class="attachment" id="attachment-#{a.id}"]
       => link_to a.file.filename, a.file.url
       -if current_user == a.attachable.user
         => link_to 'Remove file', 

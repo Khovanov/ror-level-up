@@ -2,5 +2,9 @@
   $('#edit-answer-errors-<%= @answer.id %>').html("<%= j render 'shared/error', resource: @answer %>");
 <% else %> 
   $('#edit-answer-errors-<%= @answer.id %>').empty();   
-  $('#answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>');
+  <% if remotipart_submitted? %>
+      $('#answer-<%= @answer.id %>').replaceWith('<%= j "#{render @answer}" %>');
+  <% else %>
+      $('#answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>');
+  <% end %>
 <% end %>
