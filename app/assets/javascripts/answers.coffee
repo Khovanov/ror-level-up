@@ -9,6 +9,6 @@ edit_answer = ->
     e.preventDefault();
     $(this).hide();
     answer_id = $(this).data('answerId');
-    $('form#edit-answer-' + answer_id).show();
+    $('#edit-answer-' + answer_id).show();
 
 $(document).on('page:update', edit_answer) 

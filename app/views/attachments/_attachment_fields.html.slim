@@ -1,0 +1,8 @@
+.attachment-fields
+  - if f.object.file.present? 
+      => link_to f.object.file.filename, f.object.file.url
+  - else
+      p = f.label :file, 'Select file' 
+      p = f.file_field :file
+  p = link_to_remove_association 'Remove file', f , { wrapper_class: 'attachment-fields' }
+      

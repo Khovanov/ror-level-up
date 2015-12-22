@@ -1,20 +1,7 @@
-= form_for @question do |f| 
- 
-  - @question.errors.any? 
-    #error_explanation
-      h2
-        = pluralize(@question.errors.count, "error") 
-      ul
-        - @question.errors.full_messages.each do |msg| 
-          li = msg 
-  p 
-    = f.label :title 
-    br
-    = f.text_field :title 
-  p 
-    = f.label :body 
-    br
-    = f.text_area :body 
-  p 
-    = f.submit 
- 
+= form_for @question, remote: remote do |f| 
+  p = f.label :title 
+  = f.text_field :title , placeholder: 'Title you question'
+  p = f.label :body 
+  = f.text_area :body, placeholder: 'Body you question'
+  = render 'attachments/attachment_form', f: f
+  p = f.submit submit_text

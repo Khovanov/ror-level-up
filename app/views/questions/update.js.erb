@@ -1,8 +1,9 @@
-$('.question-errors').empty();
 <% if @question.errors.present? %>
-  <% @question.errors.full_messages.each do |message| %>
-    $('.question-errors').append("<%= j render 'error', message: message %>");
+  $('.question-errors').html("<%= j render 'shared/error', resource: @question %>");
+<% else %>  
+  <% if remotipart_submitted? %>
+      $('.question').html('<%= j "#{render 'question'}" %>');
+  <% else %>
+      $('.question').html("<%= j render 'question' %>");
   <% end %>
-<% else %>
-  $('.question').html("<%= j render 'question' %>");
 <% end %>

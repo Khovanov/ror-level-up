@@ -1,8 +1,10 @@
-$('.answer-errors').empty();
 <% if @answer.errors.present? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').append("<%= j render 'error', message: message %>");
+  $('#edit-answer-errors-<%= @answer.id %>').html("<%= j render 'shared/error', resource: @answer %>");
+<% else %> 
+  $('#edit-answer-errors-<%= @answer.id %>').empty();   
+  <% if remotipart_submitted? %>
+      $('#answer-<%= @answer.id %>').replaceWith('<%= j "#{render @answer}" %>');
+  <% else %>
+      $('#answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>');
   <% end %>
-<% else %>
-  $('#answer-<%= @answer.id %>').replaceWith('<%= j render @answer %>');
 <% end %>

@@ -15,6 +15,7 @@ h2 Answers
   p No answers found.
 
 h3 Add answer
-.answer-errors
-= render 'answers/form' 
+#add-answer-errors
+= render partial: 'answers/form', locals: {answer: @answer ,submit_text: 'Create Answer'}
+
 
