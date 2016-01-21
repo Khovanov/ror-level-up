@@ -1,28 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:user) {create :user}
-  let(:another_user) {create :user}
-  let(:question) {create :question, user: user}
+  let(:user) { create :user }
+  let(:another_user) { create :user }
+  let(:question) { create :question, user: user }
 
-  describe 'GET #index' do 
-    let(:questions) {create_list(:question, 2)}
+  describe 'GET #index' do
+    let(:questions) { create_list(:question, 2) }
     # @questions = FactoryGirl.create_list(:question, 2)
-    before {get :index}
+    before { get :index }
 
     it 'poulates an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
 
-    it 'renders index view' do 
+    it 'renders index view' do
       expect(response).to render_template :index
     end
   end
 
-  describe 'GET #show' do 
-    before {get :show, id: question } # question.id
+  describe 'GET #show' do
+    before { get :show, id: question } # question.id
 
-    it 'assigns the requested question to @question' do 
+    it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
 
@@ -32,15 +32,18 @@ RSpec.describe QuestionsController, type: :controller do
 
     # it 'builds new attachment for answer' do
     #   expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    # end 
+    # end
 
     it 'renders show view'do
       expect(response).to render_template :show
     end
   end
 
-  describe 'GET #new' do 
-    before {login user; get :new}
+  describe 'GET #new' do
+    before do
+      login user
+      get :new
+    end
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
@@ -50,31 +53,34 @@ RSpec.describe QuestionsController, type: :controller do
     #   expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     # end
 
-    it 'renders new view' do 
+    it 'renders new view' do
       expect(response).to render_template :new
     end
   end
 
   describe 'GET #edit' do
-    before {login user; get :edit, id: question }
+    before do
+      login user
+      get :edit, id: question
+    end
 
-    it 'assigns the requested question to @question' do 
+    it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
-    end 
+    end
 
-    it 'renders edit view' do 
+    it 'renders edit view' do
       expect(response).to render_template :edit
-    end   
+    end
   end
 
   describe 'POST #create' do
-    let(:create_question) do 
-      post :create, 
-            question: attributes_for(:question) 
+    let(:create_question) do
+      post :create,
+           question: attributes_for(:question)
     end
-    let(:create_invalid_question) do 
-      post :create, 
-            question: attributes_for(:invalid_question) 
+    let(:create_invalid_question) do
+      post :create,
+           question: attributes_for(:invalid_question)
     end
     context 'when user unauthenticated' do
       it 'does not save the question' do
@@ -82,7 +88,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'with valid attributes' do 
+    context 'with valid attributes' do
       before { login user }
 
       it 'saves new question in the database' do
@@ -105,7 +111,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      before { login user }     
+      before { login user }
       it 'does not save the question' do
         expect { create_invalid_question }.to_not change(Question, :count)
       end
@@ -119,16 +125,16 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     let(:update_question_attr) do
-      patch :update, 
-            id: question, 
+      patch :update,
+            id: question,
             question: attributes_for(:question),
             format: :js
     end
     let(:update_question_body) do
-      patch :update, 
-            id: question, 
-            question: { title: 'some test title', body: 'some test body'},
-            format: :js    
+      patch :update,
+            id: question,
+            question: { title: 'some test title', body: 'some test body' },
+            format: :js
     end
 
     context 'when user unauthenticated' do
@@ -140,13 +146,13 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when user try edit his question' do 
+    context 'when user try edit his question' do
       before { login user }
 
-      it 'assigns the requested question to @question' do 
+      it 'assigns the requested question to @question' do
         update_question_attr
         expect(assigns(:question)).to eq question
-      end 
+      end
 
       it 'change question attributes' do
         update_question_body
@@ -156,7 +162,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'render to the updated question' do
-        update_question_attr 
+        update_question_attr
         expect(response).to render_template :update
       end
     end
@@ -177,16 +183,16 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with invalid attributes' do
       before do
         login user
-        patch :update, 
-              id: question, 
-              question: { title: nil, body: nil},
+        patch :update,
+              id: question,
+              question: { title: nil, body: nil },
               format: :js
       end
 
       it 'not change question attributes' do
         question.reload
         expect(question.title).to_not eq nil
-        expect(question.body).to_not eq nil     
+        expect(question.body).to_not eq nil
       end
 
       it 'render template update' do
@@ -197,10 +203,10 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     let(:destroy_question) do
-      delete :destroy, 
-              id: question
+      delete :destroy,
+             id: question
     end
-    before {question}
+    before { question }
 
     context 'when user unauthenticated' do
       it 'does not delete question' do
@@ -208,7 +214,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when user try delete his question' do 
+    context 'when user try delete his question' do
       before { login user }
       it 'delete question' do
         expect { destroy_question }.to change(Question, :count).by(-1)
@@ -228,4 +234,3 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 end
-

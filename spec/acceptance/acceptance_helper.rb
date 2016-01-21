@@ -1,7 +1,9 @@
 require 'rails_helper'
 require 'capybara/poltergeist'
+# require 'capybara/rspec'
 
 RSpec.configure do |config|
+  # Capybara.javascript_driver = :webkit
   Capybara.javascript_driver = :poltergeist
   # Capybara.javascript_driver = :selenium
 

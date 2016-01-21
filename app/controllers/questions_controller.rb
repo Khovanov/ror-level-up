@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-  def index 
+  def index
     @questions = Question.all
   end
 
@@ -29,13 +29,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user == @question.user 
-      @question.update(question_params)
-    end
+    @question.update(question_params) if current_user == @question.user
   end
 
   def destroy
-    if current_user == @question.user 
+    if current_user == @question.user
       @question.destroy
       redirect_to questions_path
     else

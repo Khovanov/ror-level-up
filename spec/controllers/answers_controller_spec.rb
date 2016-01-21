@@ -1,24 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-# describe AnswersController do
+  # describe AnswersController do
   let(:user) { create :user }
   let(:another_user) { create :user }
   let(:question) { create :question, user: user }
   let(:answer) { create :answer, question: question, user: user }
-   
+
   describe 'POST #create' do
-    let(:create_answer) do 
+    let(:create_answer) do
       post :create,
-            answer: attributes_for(:answer), 
-            question_id: question, 
-            format: :js  
+           answer: attributes_for(:answer),
+           question_id: question,
+           format: :js
     end
-    let(:create_invalid_answer) do 
-      post :create, 
-            answer: attributes_for(:invalid_answer), 
-            question_id: question, 
-            format: :js 
+    let(:create_invalid_answer) do
+      post :create,
+           answer: attributes_for(:invalid_answer),
+           question_id: question,
+           format: :js
     end
 
     context 'when user unauthenticated' do
@@ -27,9 +27,9 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'with valid attributes' do 
+    context 'with valid attributes' do
       before { login user }
- 
+
       it 'saves new answer in the database' do
         expect { create_answer }.to change(question.answers, :count).by(1)
         # change(Answer, :count)
@@ -48,13 +48,13 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      before { login user }      
+      before { login user }
       it 'does not save the answer' do
         expect { create_invalid_answer }.to_not change(Answer, :count)
       end
 
       it 'render create template' do
-        create_invalid_answer 
+        create_invalid_answer
         # expect(response).to redirect_to question_path(question)
         expect(response).to render_template :create
       end
@@ -63,18 +63,18 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     let(:update_answer_attr) do
-      patch :update, 
-            id: answer, 
-            question_id: question, 
-            answer: attributes_for(:answer), 
+      patch :update,
+            id: answer,
+            question_id: question,
+            answer: attributes_for(:answer),
             format: :js
     end
     let(:update_answer_body) do
-      patch :update, 
-            id: answer, 
-            question_id: question, 
-            answer: { body: 'updated answer body' }, 
-            format: :js      
+      patch :update,
+            id: answer,
+            question_id: question,
+            answer: { body: 'updated answer body' },
+            format: :js
     end
 
     context 'when user unauthenticated' do
@@ -84,19 +84,19 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to_not eq 'updated answer body'
       end
     end
-    
-    context 'when user try edit his answer' do 
+
+    context 'when user try edit his answer' do
       before { login user }
-      
+
       it 'assigns the requested answer to @answer' do
-        update_answer_attr 
+        update_answer_attr
         expect(assigns(:answer)).to eq answer
-      end 
+      end
 
       it 'assigns the question' do
-        update_answer_attr 
+        update_answer_attr
         expect(assigns(:question)).to eq question
-      end 
+      end
 
       it 'change answer attributes' do
         update_answer_body
@@ -125,16 +125,16 @@ RSpec.describe AnswersController, type: :controller do
     context 'with invalid attributes' do
       before { login user }
       before do
-        patch :update, 
-              id: answer, 
-              question_id: question, 
-              answer: {body: nil}, 
+        patch :update,
+              id: answer,
+              question_id: question,
+              answer: { body: nil },
               format: :js
-      end            
+      end
       it 'not change answer attributes' do
         answer.reload
         expect(answer.body).to_not eq nil
-      end     
+      end
 
       it 'render updated template' do
         expect(response).to render_template :update
@@ -144,9 +144,9 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #best' do
     let(:best_answer) do
-      patch :best, 
-            id: answer, 
-            question_id: question, 
+      patch :best,
+            id: answer,
+            question_id: question,
             format: :js
     end
 
@@ -158,10 +158,13 @@ RSpec.describe AnswersController, type: :controller do
         end.to_not change(answer, :best)
       end
     end
-    
-    context 'when author question try set best answer' do 
-      before { login user; best_answer }
-      
+
+    context 'when author question try set best answer' do
+      before do
+        login user
+        best_answer
+      end
+
       it 'set best answer' do
         answer.reload
         expect(answer.best?).to eq true
@@ -174,7 +177,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when non author question try set best answer' do
       before { login another_user }
-      
+
       it 'not set best answer' do
         expect do
           best_answer
@@ -186,20 +189,20 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do
     let(:destroy_answer) do
-      delete :destroy, 
-              id: answer, 
-              question_id: question,
-              format: :js
+      delete :destroy,
+             id: answer,
+             question_id: question,
+             format: :js
     end
     before { answer }
-    
+
     context 'when user unauthenticated' do
       it 'does not delete answer' do
         expect { destroy_answer }.to_not change(Answer, :count)
       end
     end
 
-    context 'when user try delete his answer' do 
+    context 'when user try delete his answer' do
       before { login user }
 
       it 'delete answer' do
@@ -217,6 +220,6 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not delete answer' do
         expect { destroy_answer }.to_not change(Answer, :count)
       end
-    end    
+    end
   end
 end

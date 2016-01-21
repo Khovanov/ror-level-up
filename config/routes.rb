@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
-
   devise_for :users
   root 'questions#index'
 
   resources :attachments, only: :destroy
-  
+
   resources :questions do
     resources :answers do
       patch 'best', on: :member
-    end   
+    end
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

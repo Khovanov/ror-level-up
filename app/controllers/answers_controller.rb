@@ -11,15 +11,11 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user == @answer.user     
-      @answer.update(answer_params)
-    end
+    @answer.update(answer_params) if current_user == @answer.user
   end
 
   def destroy
-    if current_user == @answer.user 
-      @answer.destroy
-    end
+    @answer.destroy if current_user == @answer.user
   end
 
   def best
