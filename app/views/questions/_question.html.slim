@@ -1,7 +1,7 @@
 p: strong = @question.title
 p = @question.body
 = render 'attachments/attachment_list', resource: @question
-
+= render 'vote'
 - if user_signed_in?
   -if @question.user == current_user 
     / # = link_to 'Edit', edit_question_path(@question)
@@ -16,3 +16,6 @@ p = @question.body
                 method: :delete      
     .edit-question-form
       = render partial: 'questions/form', locals: {submit_text: 'Edit Question', remote: true}
+
+
+   

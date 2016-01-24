@@ -42,6 +42,30 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def vote_up
+    load_question
+    @question.vote_up(current_user) unless current_user == @question.user
+    respond_to do |format|
+      format.json { render :vote }
+    end
+  end
+
+  def vote_down
+    load_question
+    @question.vote_down(current_user) unless current_user == @question.user
+    respond_to do |format|
+      format.json { render :vote }
+    end  
+  end
+
+  def vote_cancel
+    load_question
+    @question.vote_cancel(current_user) unless current_user == @question.user
+    respond_to do |format|
+      format.json { render :vote }
+    end   
+  end
+
   private
 
   def load_question

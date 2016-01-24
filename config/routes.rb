@@ -5,8 +5,13 @@ Rails.application.routes.draw do
   resources :attachments, only: :destroy
 
   resources :questions do
+    member do
+      patch :vote_up
+      patch :vote_down
+      patch :vote_cancel
+    end
     resources :answers do
-      patch 'best', on: :member
+      patch :best, on: :member
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.
