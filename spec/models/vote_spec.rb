@@ -37,4 +37,31 @@ RSpec.describe Vote, type: :model do
       expect(question.votes.rating).to eq 1
     end
   end
+
+  describe 'voting for answer' do
+    let(:user) { create :user }
+    let(:answer) { create :answer }
+
+    it 'vote up' do
+      answer.vote_up(user)
+      expect(answer.votes.rating).to eq 1
+    end
+
+    it 'vote down' do
+      answer.vote_down(user)
+      expect(answer.votes.rating).to eq -1
+    end
+
+    it 'vote cancel' do
+      answer.vote_up(user)
+      answer.vote_cancel(user)
+      expect(answer.votes.rating).to eq 0
+    end
+
+    it 'can`t double vote' do
+      answer.vote_up(user)
+      answer.vote_up(user)
+      expect(answer.votes.rating).to eq 1
+    end
+  end
 end

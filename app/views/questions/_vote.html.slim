@@ -9,9 +9,9 @@
   - if user_signed_in?
     -unless @question.user == current_user 
       -if @question.voted(current_user).present?
-       - display_vote = 'none' 
+        - display_vote = 'none' 
       -else
-       - display_cancel = 'none' 
+        - display_cancel = 'none' 
 
 
       => link_to 'Vote up', 

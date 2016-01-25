@@ -11,6 +11,11 @@ Rails.application.routes.draw do
       patch :vote_cancel
     end
     resources :answers do
+      member do
+        patch :vote_up
+        patch :vote_down
+        patch :vote_cancel
+      end      
       patch :best, on: :member
     end
   end

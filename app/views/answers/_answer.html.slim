@@ -4,6 +4,7 @@
       p The best answer 
     p = answer.body 
     = render 'attachments/attachment_list', resource: answer
+    = render 'answers/vote', answer: answer
     - if user_signed_in?
       -if answer.user == current_user
         p 

@@ -6,6 +6,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:another_user) { create :user }
   let(:question) { create :question, user: user }
   let(:answer) { create :answer, question: question, user: user }
+  let(:vote_up_answer) { create :vote_up_answer, votable: answer, user: another_user }
 
   describe 'POST #create' do
     let(:create_answer) do
@@ -184,6 +185,121 @@ RSpec.describe AnswersController, type: :controller do
           answer.reload
         end.to_not change(answer, :best)
       end
+    end
+  end
+
+  describe 'PATCH #vote_up' do
+    let(:vote_up) do
+      patch :vote_up, 
+            id: answer,
+            question_id: question,
+            format: :json
+      answer.reload
+    end
+
+    context 'when user unauthenticated' do
+      it 'can`t vote for the answer' do
+        vote_up
+        expect(answer.votes.rating).to_not eq 1
+      end
+    end
+
+    context 'author of answer' do
+      before { login user }
+      it 'can`t vote for the own answer' do
+        vote_up
+        expect(answer.votes.rating).to_not eq 1
+      end
+    end
+
+    context 'when user try vote up for answer' do
+      before { login another_user }
+      it 'change up rating' do
+        vote_up
+        expect(answer.votes.rating).to eq 1
+      end
+
+      it 'render template vote' do
+        vote_up
+        expect(response).to render_template :vote
+      end
+    end
+  end
+
+  describe 'PATCH #vote_down' do
+    let(:vote_down) do
+      patch :vote_down, 
+            id: answer,
+            question_id: question,
+            format: :json
+      answer.reload
+    end
+
+    context 'when user unauthenticated' do
+      it 'can`t vote for the answer' do
+        vote_down
+        expect(answer.votes.rating).to_not eq -1
+      end
+    end
+
+    context 'author of answer' do
+      before { login user }
+      it 'can`t vote for the own answer' do
+        vote_down
+        expect(answer.votes.rating).to_not eq -1
+      end
+    end
+
+    context 'when user try vote down for answer' do
+      before { login another_user }
+      it 'change down rating' do
+        vote_down
+        expect(answer.votes.rating).to eq -1
+      end
+
+      it 'render template vote' do
+        vote_down
+        expect(response).to render_template :vote
+      end
+    end
+  end
+
+  describe 'PATCH #vote_cancel' do
+    let(:vote_cancel) do
+      vote_up_answer
+      patch :vote_cancel, 
+            id: answer,
+            question_id: question,
+            format: :json
+      answer.reload
+    end
+
+    context 'when user unauthenticated' do
+      it 'can`t cancel vote' do
+        vote_cancel
+        expect(answer.votes.rating).to_not eq 0
+      end
+    end
+
+    context 'author of answer' do
+      before { login user }
+      it 'can`t cancel vote for the own answer' do
+        vote_cancel
+        expect(answer.votes.rating).to_not eq 0
+      end
+    end
+
+    context 'when user try cancel own vote' do
+      before { login another_user }
+      it 'change to 0 rating' do
+        vote_cancel
+        expect(answer.votes.rating).to eq 0
+      end
+
+      it 'render template vote' do
+        vote_cancel
+        expect(response).to render_template :vote
+      end 
     end
   end
 
