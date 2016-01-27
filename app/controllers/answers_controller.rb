@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!
   before_action :load_question
   before_action :load_answer, only: [:destroy, :update, :best]
@@ -20,30 +22,6 @@ class AnswersController < ApplicationController
 
   def best
     @answer.best! if @question.user == current_user
-  end
-
-  def vote_up
-    load_answer
-    @answer.vote_up(current_user) unless current_user == @answer.user
-    respond_to do |format|
-      format.json { render :vote }
-    end
-  end
-
-  def vote_down
-    load_answer
-    @answer.vote_down(current_user) unless current_user == @answer.user
-    respond_to do |format|
-      format.json { render :vote }
-    end  
-  end
-
-  def vote_cancel
-    load_answer
-    @answer.vote_cancel(current_user) unless current_user == @answer.user
-    respond_to do |format|
-      format.json { render :vote }
-    end   
   end
 
   private

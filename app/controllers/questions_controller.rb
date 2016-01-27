@@ -1,6 +1,9 @@
 class QuestionsController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!, except: [:show, :index]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+
   def index
     @questions = Question.all
   end
@@ -40,30 +43,6 @@ class QuestionsController < ApplicationController
       # redirect_to question_path(@question)
       redirect_to @question
     end
-  end
-
-  def vote_up
-    load_question
-    @question.vote_up(current_user) unless current_user == @question.user
-    respond_to do |format|
-      format.json { render :vote }
-    end
-  end
-
-  def vote_down
-    load_question
-    @question.vote_down(current_user) unless current_user == @question.user
-    respond_to do |format|
-      format.json { render :vote }
-    end  
-  end
-
-  def vote_cancel
-    load_question
-    @question.vote_cancel(current_user) unless current_user == @question.user
-    respond_to do |format|
-      format.json { render :vote }
-    end   
   end
 
   private
