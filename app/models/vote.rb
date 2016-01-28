@@ -5,13 +5,11 @@ class Vote < ActiveRecord::Base
   validates :value, :user_id, presence: true
 
   def vote_up
-    self.value = 1
-    save
+    update(value: 1)
   end
 
   def vote_down
-    self.value = -1
-    save
+    update(value: -1)
   end
 
   def vote_cancel

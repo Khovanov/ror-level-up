@@ -6,12 +6,12 @@ module Votable
   end
 
   def vote_up(user)
-    vote = votes.find_or_create_by(user: user, votable: self)
+    vote = votes.find_or_initialize_by(user: user, votable: self)
     vote.vote_up
   end
 
   def vote_down(user)
-    vote = votes.find_or_create_by(user: user, votable: self)
+    vote = votes.find_or_initialize_by(user: user, votable: self)
     vote.vote_down
   end
 

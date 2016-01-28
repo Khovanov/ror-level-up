@@ -3,3 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .edit-question-form {display: none;}
+.question-vote-up-link, .question-vote-down-link {display: inline-block;}
+.question-vote-cancel-link {display: none;}
+.has-vote .question-vote-cancel-link {display: inline-block;}
+.has-vote .question-vote-up-link, .has-vote .question-vote-down-link {display: none;}

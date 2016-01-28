@@ -9,16 +9,15 @@ edit_question = ->
     $('.edit-question-form').show();
 
 vote_question = ->
-  $('.question-votes').bind 'ajax:success', (e, data, status, xhr) ->
+  $('.question').bind 'ajax:success', (e, data, status, xhr) ->
     vote = $.parseJSON(xhr.responseText)
-    $('.question-votes-count').html(vote.count)
-    $('.question-votes-rating').html(vote.rating)
+    target = $(e.target).parent()
+    $('#question-vote-count').html(vote.count)
+    $('#question-vote-rating').html(vote.rating)
     if (vote.present == true)
-      $('.question-vote-up-link, .question-vote-down-link').hide()
-      $('.question-vote-cancel-link').show()
+      target.addClass("has-vote")
     else
-      $('.question-vote-up-link, .question-vote-down-link').show()
-      $('.question-vote-cancel-link').hide()
+      target.removeClass("has-vote")
 
 # vote_rating = (arr) ->
 #   return arr.reduce (sum, vote) -> 

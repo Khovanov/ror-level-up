@@ -8,23 +8,21 @@ edit_answer = ->
   $('.answers').on 'click', '.edit-answer-link', (e) -> 
     e.preventDefault();
     $(this).hide();
-    answer_id = $(this).data('answerId');
-    $('#edit-answer-' + answer_id).show();
+    answer_id = $(this).data('answerId')
+    $('#edit-answer-' + answer_id).show()
 
 vote_answer = ->
-  $('.answer-vote').bind 'ajax:success', (e, data, status, xhr) ->
+  $('.answers').bind 'ajax:success', (e, data, status, xhr) ->
     vote = $.parseJSON(xhr.responseText)
-    answer_id = $(this).data('answerId');
+    target = $(e.target).parent()
+    answer_id = $(target).data('answerId')
+    # console.log(answer_id)
     $('#answer-vote-count-' + answer_id).html(vote.count)
     $('#answer-vote-rating-' + answer_id).html(vote.rating)
     if (vote.present == true)
-      $('#answer-vote-up-link-' + answer_id).hide()
-      $('#answer-vote-down-link-' + answer_id).hide()
-      $('#answer-vote-cancel-link-' + answer_id).show()
+      target.addClass("has-vote")
     else
-      $('#answer-vote-up-link-' + answer_id).show()
-      $('#answer-vote-down-link-' + answer_id).show()
-      $('#answer-vote-cancel-link-' + answer_id).hide()
+      target.removeClass("has-vote")
 
 $(document).on('page:update', edit_answer) 
 $(document).on('page:update', vote_answer) 
