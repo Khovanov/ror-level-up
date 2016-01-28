@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!
   before_action :load_question
   before_action :load_answer, only: [:destroy, :update, :best]
@@ -11,15 +13,11 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user == @answer.user     
-      @answer.update(answer_params)
-    end
+    @answer.update(answer_params) if current_user == @answer.user
   end
 
   def destroy
-    if current_user == @answer.user 
-      @answer.destroy
-    end
+    @answer.destroy if current_user == @answer.user
   end
 
   def best

@@ -4,8 +4,8 @@ FactoryGirl.define do
   end
 
   factory :answer do
-    question 
-    body 
+    question
+    body
     user
   end
 

@@ -1,15 +1,14 @@
 require_relative '../acceptance_helper'
 
-feature 'Create answer', %q{
+feature 'Create answer', %q(
   In order to exchange my knowledge
   As an authenticated user
   I want to be able to create answers
-} do
-
+) do
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
 
-  scenario 'Unauthenticated user try creates answer'  do  
+  scenario 'Unauthenticated user try creates answer' do
     visit question_path(question)
     fill_in 'Answer', with: 'Answer text body'
     # save_and_open_page
@@ -27,7 +26,7 @@ feature 'Create answer', %q{
       # save_and_open_page
     end
 
-    scenario 'try creates valid answer', js: true do  
+    scenario 'try creates valid answer', js: true do
       fill_in 'Answer', with: 'Answer text body'
       click_on 'Create Answer'
 
@@ -37,7 +36,7 @@ feature 'Create answer', %q{
       end
     end
 
-    scenario 'try creates invalid answer', js: true do  
+    scenario 'try creates invalid answer', js: true do
       click_on 'Create Answer'
 
       expect(page).to have_content "Body can't be blank"

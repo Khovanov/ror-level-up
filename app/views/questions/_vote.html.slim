@@ -1,0 +1,30 @@
+div[class="question-vote #{ 'has-vote' if question.voted(current_user)}"]
+  p 
+    |Votes:
+    span[id="question-vote-count"] = question.votes.count
+  p 
+    |Rating:
+    span[id="question-vote-rating"] = question.votes.rating
+
+  - if user_signed_in?
+    -unless question.user == current_user 
+      => link_to 'Vote up', 
+                  [:vote_up, question],
+                  method: :patch,
+                  data: { type: :json },
+                  class: "question-vote-up-link",
+                  remote: true
+      => link_to 'Vote cancel', 
+                  [:vote_cancel, question],
+                  method: :patch,
+                  data: { type: :json },
+                  class: "question-vote-cancel-link",
+                  remote: true
+      => link_to 'Vote down', 
+                  [:vote_down, question],
+                  method: :patch,
+                  data: { type: :json },
+                  # id: "question-vote-down-link-#{question.id}",
+                  class: "question-vote-down-link", 
+                  # style: "display: #{}",                 
+                  remote: true

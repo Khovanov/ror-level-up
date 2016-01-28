@@ -19,3 +19,6 @@ config/database.yml
 /public/tmp
 /public/uploads
 /public/spec
+
+# Ignore foreman
+procfile

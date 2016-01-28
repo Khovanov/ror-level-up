@@ -1,15 +1,14 @@
 require_relative 'acceptance_helper'
 
-feature 'User authentication' , %q{
+feature 'User authentication', %q(
   In order to be able to ask question
   As an user
   I want to be able to sign in, sign_out,
   registrations.
-} do
+) do
+  given(:user) { create(:user) } # FactoryGirl.create
 
-  given(:user) { create(:user) } #FactoryGirl.create
-
-  scenario 'Registered user try to sign in'  do
+  scenario 'Registered user try to sign in' do
     sign_in(user)
     # save_and_open_page
 
@@ -17,12 +16,12 @@ feature 'User authentication' , %q{
     expect(current_path).to eq root_path
   end
 
-  scenario 'Non-registered user try to sign in'  do
+  scenario 'Non-registered user try to sign in' do
     visit new_user_session_path
     fill_in 'Email', with: 'bad-mail@mail.com'
     fill_in 'Password', with: 'bad-password'
 
-    click_on 'Log in' 
+    click_on 'Log in'
     # save_and_open_page
 
     expect(page).to have_content 'Invalid email or password.'
