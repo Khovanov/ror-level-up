@@ -18,4 +18,5 @@ h3 Add answer
 #add-answer-errors
 = render partial: 'answers/form', locals: {answer: @answer ,submit_text: 'Create Answer'}
 
+= subscribe_to "/questions/#{@question.id}/comments"
 
