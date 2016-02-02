@@ -17,5 +17,4 @@ p = @question.body
     .edit-question-form
       = render partial: 'questions/form', locals: {submit_text: 'Edit Question', remote: true}
 
-= render 'comments/list', resource: @question
-   
+= render 'questions/comments', question: @question   

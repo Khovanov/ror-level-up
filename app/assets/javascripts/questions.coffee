@@ -9,7 +9,7 @@ edit_question = ->
     $('.edit-question-form').show();
 
 vote_question = ->
-  $('.question').bind 'ajax:success', (e, data, status, xhr) ->
+  $('.question').on 'ajax:success', (e, data, status, xhr) ->
     # target = $(e.target).parent()
     target = $(e.target).parents('.question-vote')
     if (target.hasClass('question-vote'))
@@ -42,9 +42,6 @@ comment_question = ->
 #     return sum + vote.value
 #   , 0
 
-# $(document).on('page:update', edit_question) 
-# $(document).on('page:update', vote_question) 
-# $(document).on('page:update', comment_question) 
 $ ->
   edit_question()
   vote_question()
