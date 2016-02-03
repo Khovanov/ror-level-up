@@ -9,4 +9,8 @@ class Question < ActiveRecord::Base
 
   validates :title, :body, :user_id, presence: true
   validates :title, :body, length: { minimum: 10 }
+
+  def channel_path
+    "/questions/#{id}/comments"
+  end 
 end

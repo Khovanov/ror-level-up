@@ -18,4 +18,8 @@ class Answer < ActiveRecord::Base
       update!(best: true)
     end
   end
+
+  def channel_path
+    "/questions/#{question_id}/comments"
+  end 
 end
