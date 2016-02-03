@@ -12,7 +12,10 @@ class CommentsController < ApplicationController
           render :create
           # render json: @comment
           # PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json
-          PrivatePub.publish_to "/questions/#{@commentable.id}/comments", comment: @comment.to_json
+          # PrivatePub.publish_to "/questions/#{@commentable.id}/comments", comment: @comment.to_json
+          PrivatePub.publish_to channel, comment: render_to_string(:create)  
+            # comment: render_to_string(:create), html: render_to_string(partial: 'comments/comment.html.slim', locals: {comment: @comment}) 
+            # comment: render_to_string(template: 'comments/create.json.jbuilder') 
           # render nothing: true
         end
       else
@@ -21,10 +24,13 @@ class CommentsController < ApplicationController
         # format.js
       end
     end
-
   end
 
   private
+
+  def channel
+    "/questions/#{@commentable.try(:question).try(:id) || @commentable.id}/comments"
+  end
 
   def set_commentable
     @commentable = commentable_klass.find(params[commentable_id])

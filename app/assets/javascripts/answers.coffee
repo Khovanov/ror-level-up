@@ -25,25 +25,6 @@ vote_answer = ->
       else
         target.removeClass("has-vote")
 
-comment_answer = ->
-  $('.answers').bind 'ajax:success', (e, data, status, xhr) ->
-    target = $(e.target).parents('.answer-comments')
-    if (target.hasClass('answer-comments'))    
-      obj = $.parseJSON(xhr.responseText)
-      answer_id = $(target).data('answerId')
-      $('#answer-comments-errors-' + answer_id).empty()
-      $('#answer-comments-list-' + answer_id + ' ul').append('<li>' + obj.comment.body + '</li>')
-
-  .bind 'ajax:error', (e, xhr, status, error) ->
-    target = $(e.target).parents('.answer-comments')
-    if (target.hasClass('answer-comments')) 
-      errors = $.parseJSON(xhr.responseText)
-      answer_id = $(target).data('answerId')
-      $('#answer-comments-errors-' + answer_id).empty()
-      $.each errors, (index, value) ->
-        $('#answer-comments-errors-' + answer_id).append(value)     
-
 $ ->
   edit_answer()
   vote_answer()
-  comment_answer()

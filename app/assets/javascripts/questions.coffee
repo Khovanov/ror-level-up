@@ -25,11 +25,9 @@ comment_question = ->
   $('.question').bind 'ajax:success', (e, data, status, xhr) ->
     target = $(e.target).parents('.question-comments')
     if (target.hasClass('question-comments'))    
-      data = $.parseJSON(xhr.responseText)
-      # console.log('js:' + document.getElementById('comment-' + data.comment.id))
-      if document.getElementById('comment-' + data.comment.id) == null 
-        $('.question-comments-errors').empty()
-        comment_append(data.comment)
+      $('.question-comments-errors').empty()
+      comment = $.parseJSON(xhr.responseText)
+      comment_question_append(comment)
 
   .bind 'ajax:error', (e, xhr, status, error) ->
     target = $(e.target).parents('.question-comments')
@@ -39,27 +37,51 @@ comment_question = ->
       $.each errors, (index, value) ->
         $('.question-comments-errors').append(value)     
 
+comment_answer = ->
+  $('.answers').bind 'ajax:success', (e, data, status, xhr) ->
+    target = $(e.target).parents('.answer-comments')
+    if (target.hasClass('answer-comments'))    
+      answer_id = $(target).data('answerId')
+      $('#answer-comments-errors-' + answer_id).empty()
+      comment = $.parseJSON(xhr.responseText)
+      comment_answer_append(comment)
+
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    target = $(e.target).parents('.answer-comments')
+    if (target.hasClass('answer-comments')) 
+      errors = $.parseJSON(xhr.responseText)
+      answer_id = $(target).data('answerId')
+      $('#answer-comments-errors-' + answer_id).empty()
+      $.each errors, (index, value) ->
+        $('#answer-comments-errors-' + answer_id).append(value)  
+
 # vote_rating = (arr) ->
 #   return arr.reduce (sum, vote) -> 
 #     return sum + vote.value
 #   , 0
 
-comment_question_pub = ->
+comment_pub = ->
   questionId = $('.question').data('questionId');
   channel = '/questions/' + questionId + '/comments'
   PrivatePub.subscribe channel, (data, channel) ->
     # console.log(data)
     comment = $.parseJSON(data['comment'])
-    # console.log('pub:' + document.getElementById('comment-' + comment.id))
-    if document.getElementById('comment-' + comment.id) == null 
-      comment_append(comment)
+    comment_question_append(comment) if comment.commentable_type == 'Question'
+    comment_answer_append(comment) if comment.commentable_type == 'Answer'
 
-comment_append = (comment) ->
-  str = '<li class="comment" id="comment-' + comment.id + '">' + comment.body + '</li>'
-  $('.question-comments-list ul').append(str)
+comment_question_append = (comment) ->
+  if document.getElementById('comment-' + comment.id) == null   
+    str = '<li class="comment" id="comment-' + comment.id + '">' + comment.body + '</li>'
+    $('.question-comments-list ul').append(str)
+
+comment_answer_append = (comment) ->
+  if document.getElementById('comment-' + comment.id) == null   
+    str = '<li class="comment" id="comment-' + comment.id + '">' + comment.body + '</li>'
+    $('#answer-comments-list-' + comment.commentable_id + ' ul').append(str)
 
 $ ->
   edit_question()
   vote_question()
   comment_question()
-  comment_question_pub()
+  comment_answer()
+  comment_pub()
