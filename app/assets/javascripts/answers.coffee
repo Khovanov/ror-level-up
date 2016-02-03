@@ -25,6 +25,17 @@ vote_answer = ->
       else
         target.removeClass("has-vote")
 
+answer_pub = ->
+  questionId = $('.question').data('questionId');
+  channel = '/questions/' + questionId + '/answers'
+  PrivatePub.subscribe channel, (data, channel) ->
+    # console.log(data)
+    answer = $.parseJSON(data['answer'])
+    if document.getElementById('answer-' + answer.id) == null 
+      str = '<div class="answer" id="answer-' + answer.id + '"><p>' + answer.body + '</p></div>'
+      $('.answers').append(str)
+
 $ ->
   edit_answer()
   vote_answer()
+  answer_pub()

@@ -8,7 +8,11 @@ class AnswersController < ApplicationController
   def create
     # @answer = @question.answers.build(answer_params)
     # @answer.save
-    @answer = @question.answers.create(answer_params.merge(user: current_user))
+    # @answer = @question.answers.create(answer_params.merge(user: current_user))
+    @answer = @question.answers.build(answer_params.merge(user: current_user))
+    if @answer.save
+      PrivatePub.publish_to "/questions/#{@answer.question.id}/answers", answer: @answer.to_json
+    end
     # redirect_to @question
   end
 
