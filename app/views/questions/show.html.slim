@@ -1,6 +1,6 @@
 h1 Question
 = link_to 'Back to list', questions_path 
-.question
+.question data={ question_id: "#{@question.id}" }
   = render 'question'
 hr
 

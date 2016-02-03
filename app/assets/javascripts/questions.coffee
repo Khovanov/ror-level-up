@@ -25,9 +25,11 @@ comment_question = ->
   $('.question').bind 'ajax:success', (e, data, status, xhr) ->
     target = $(e.target).parents('.question-comments')
     if (target.hasClass('question-comments'))    
-      obj = $.parseJSON(xhr.responseText)
-      $('.question-comments-errors').empty()
-      $('.question-comments-list ul').append('<li>' + obj.comment.body + '</li>')
+      data = $.parseJSON(xhr.responseText)
+      # console.log('js:' + document.getElementById('comment-' + data.comment.id))
+      if document.getElementById('comment-' + data.comment.id) == null 
+        $('.question-comments-errors').empty()
+        comment_append(data.comment)
 
   .bind 'ajax:error', (e, xhr, status, error) ->
     target = $(e.target).parents('.question-comments')
@@ -42,7 +44,22 @@ comment_question = ->
 #     return sum + vote.value
 #   , 0
 
+comment_question_pub = ->
+  questionId = $('.question').data('questionId');
+  channel = '/questions/' + questionId + '/comments'
+  PrivatePub.subscribe channel, (data, channel) ->
+    # console.log(data)
+    comment = $.parseJSON(data['comment'])
+    # console.log('pub:' + document.getElementById('comment-' + comment.id))
+    if document.getElementById('comment-' + comment.id) == null 
+      comment_append(comment)
+
+comment_append = (comment) ->
+  str = '<li class="comment" id="comment-' + comment.id + '">' + comment.body + '</li>'
+  $('.question-comments-list ul').append(str)
+
 $ ->
   edit_question()
   vote_question()
   comment_question()
+  comment_question_pub()

@@ -12,6 +12,7 @@ class CommentsController < ApplicationController
           render :create
           # render json: @comment
           # PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json
+          PrivatePub.publish_to "/questions/#{@commentable.id}/comments", comment: @comment.to_json
           # render nothing: true
         end
       else
