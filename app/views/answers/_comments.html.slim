@@ -1,0 +1,11 @@
+.answer-comments data={ answer_id: "#{answer.id}" }
+  p Comments:
+  .answer-comments-list id="answer-comments-list-#{answer.id}"
+    ul
+      = render answer.comments
+  - if user_signed_in?
+    .answer-comments-errors id="answer-comments-errors-#{answer.id}"
+    .answer-comments-form id="answer-comments-form-#{answer.id}"
+      = render 'comments/form', form_path: [answer.question, answer, answer.comments.new], commentable: answer
+      / # = render 'comments/form', comment: resource.comments.new, commentable: resource
+

@@ -48,7 +48,7 @@ feature 'Edit answer', %q(
         click_on 'Save'
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'Edited answers'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector 'textarea', text: 'Edited answers'
       end
     end
 
@@ -60,7 +60,9 @@ feature 'Edit answer', %q(
         fill_in 'Answer', with: nil
         click_on 'Save'
         expect(page).to have_content answer.body
-        expect(page).to have_selector 'textarea'
+        within '.edit_answer' do
+          expect(page).to have_selector 'textarea'
+        end
       end
     end
   end

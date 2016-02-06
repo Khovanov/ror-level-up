@@ -32,3 +32,5 @@
 
       div[class="edit-answer-form" id="edit-answer-#{answer.id}"]
         = render partial: 'answers/form', locals: {answer: answer, submit_text: 'Save'}
+        
+    = render 'answers/comments', answer: answer

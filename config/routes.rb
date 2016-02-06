@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'questions#index'
 
   resources :attachments, only: :destroy
+  # resources :comments, only: [:create, :destroy]
 
   concern :votable do
     member do
@@ -12,8 +13,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # resources :questions, concerns: [:votable, :commentable, :subsribable], except: [:edit], shallow: true do
+  #   resources :answers, concerns: [:votable, :commentable], except: [:index, :show, :edit] do
+
   resources :questions, concerns: :votable do
+    resources :comments, only: :create, defaults: {commentable: 'questions'}
     resources :answers, concerns: :votable do
+      resources :comments, only: :create, defaults: {commentable: 'answers'}
       patch :best, on: :member
     end
   end

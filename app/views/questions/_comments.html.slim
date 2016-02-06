@@ -1,0 +1,10 @@
+.question-comments
+  p Comments:
+  .question-comments-list
+    ul
+      = render question.comments
+  - if user_signed_in?
+    .question-comments-errors
+    .question-comments-form
+      / # = render 'comments/form', comment: resource.comments.new, commentable: resource
+      = render 'comments/form', form_path: [question, question.comments.new], commentable: question

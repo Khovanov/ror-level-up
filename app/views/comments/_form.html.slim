@@ -1,0 +1,5 @@
+/ # = form_for [commentable, comment], remote:true , data: { type: :json } do |f|
+= form_for form_path, remote:true , data: { type: :json } do |f|
+  p = f.label :body , 'Comment'
+  = f.text_area :body 
+  p = f.submit 'Add comment'

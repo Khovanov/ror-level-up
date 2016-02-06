@@ -1,6 +1,7 @@
 class Answer < ActiveRecord::Base
   include Votable
-
+  include Commentable
+  
   belongs_to :question
   belongs_to :user
   has_many :attachments, as: :attachable, dependent: :destroy
@@ -17,4 +18,8 @@ class Answer < ActiveRecord::Base
       update!(best: true)
     end
   end
+
+  def channel_path
+    "/questions/#{question_id}/comments"
+  end 
 end

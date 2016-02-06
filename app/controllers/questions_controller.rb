@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:show, :index]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  # after_action :publish_question, only: :create
 
   def index
     @questions = Question.all
@@ -25,6 +26,7 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params.merge(user: current_user))
     # @question = current_user.questions.create(question_params)
     if @question.save
+      PrivatePub.publish_to "/questions", question: @question.to_json
       redirect_to @question
     else
       render :new
@@ -54,4 +56,8 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
   end
+
+  # def publish_question
+  #   PrivatePub.publish_to "/questions", question: QuestionPresenter.new(@question).to_json if @question.errors.empty?
+  # end
 end

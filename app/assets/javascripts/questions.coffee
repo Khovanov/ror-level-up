@@ -9,26 +9,31 @@ edit_question = ->
     $('.edit-question-form').show();
 
 vote_question = ->
-  $('.question').bind 'ajax:success', (e, data, status, xhr) ->
-    vote = $.parseJSON(xhr.responseText)
-    target = $(e.target).parent()
-    $('#question-vote-count').html(vote.count)
-    $('#question-vote-rating').html(vote.rating)
-    if (vote.present == true)
-      target.addClass("has-vote")
-    else
-      target.removeClass("has-vote")
+  $('.question').on 'ajax:success', (e, data, status, xhr) ->
+    # target = $(e.target).parent()
+    target = $(e.target).parents('.question-vote')
+    if (target.hasClass('question-vote'))
+      vote = $.parseJSON(xhr.responseText)
+      $('#question-vote-count').html(vote.count)
+      $('#question-vote-rating').html(vote.rating)
+      if (vote.present == true)
+        target.addClass("has-vote")
+      else
+        target.removeClass("has-vote")
+
+question_pub = ->
+  PrivatePub.subscribe '/questions', (data, channel) ->
+    # console.log(data)
+    question = $.parseJSON(data['question'])
+    str = '<tr><td>' + question.title + '</td><td><a href="/questions/' + question.id + '">Details</a></td></tr>'
+    $('.questions tbody').append(str)
 
 # vote_rating = (arr) ->
 #   return arr.reduce (sum, vote) -> 
 #     return sum + vote.value
 #   , 0
 
-  # .bind 'ajax:error', (e, xhr, status, error) ->
-  #   errors = $.parseJSON(xhr.responseText)
-  #   $.each errors, (index, value) ->
-  #     $('.answer-errors').append(value)
-
-
-$(document).on('page:update', edit_question) 
-$(document).on('page:update', vote_question) 
+$ ->
+  edit_question()
+  vote_question()
+  question_pub()
