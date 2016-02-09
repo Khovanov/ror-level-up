@@ -13,10 +13,11 @@ comment_question = ->
   .bind 'ajax:error', (e, xhr, status, error) ->
     target = $(e.target).parents('.question-comments')
     if (target.hasClass('question-comments')) 
-      errors = $.parseJSON(xhr.responseText)
+      errors = $.parseJSON(xhr.responseText)['errors']
       $('.question-comments-errors').empty()
+      # console.log('Comment ajax error:' + data.errors.body[0])
       $.each errors, (index, value) ->
-        $('.question-comments-errors').append(value)     
+        $('.question-comments-errors').append(index.toString() + ' ' + value)     
 
 comment_answer = ->
   $('.answers').bind 'ajax:success', (e, data, status, xhr) ->
@@ -30,17 +31,17 @@ comment_answer = ->
   .bind 'ajax:error', (e, xhr, status, error) ->
     target = $(e.target).parents('.answer-comments')
     if (target.hasClass('answer-comments')) 
-      errors = $.parseJSON(xhr.responseText)
+      errors = $.parseJSON(xhr.responseText)['errors']
       answer_id = $(target).data('answerId')
       $('#answer-comments-errors-' + answer_id).empty()
       $.each errors, (index, value) ->
-        $('#answer-comments-errors-' + answer_id).append(value)  
+        $('#answer-comments-errors-' + answer_id).append(index.toString() + ' ' + value)  
 
 comment_pub = ->
   questionId = $('.question').data('questionId');
   channel = '/questions/' + questionId + '/comments'
   PrivatePub.subscribe channel, (data, channel) ->
-    # console.log(data)
+    # console.log('Comment pub:' + data)
     comment = $.parseJSON(data['comment'])
     comment_question_append(comment) if comment.commentable_type == 'Question'
     comment_answer_append(comment) if comment.commentable_type == 'Answer'

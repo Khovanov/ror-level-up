@@ -1,7 +1,9 @@
 <% if @answer.errors.present? %>
   $('#add-answer-errors').html("<%= j render 'shared/error', resource: @answer %>");
 <% else %>
-  $('#add-answer-errors').empty();  
-  $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('#add-answer-errors').empty(); 
+  if (document.getElementById('answer-<%= @answer.id %>') == null) 
+    $('.answers').append('<%= j render @answer %>');
+    $('#new_answer #answer_body').val('');
+  end
 <% end %>

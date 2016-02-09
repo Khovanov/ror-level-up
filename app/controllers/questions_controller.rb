@@ -3,48 +3,39 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:show, :index]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-  # after_action :publish_question, only: :create
+  before_action :build_answer, only: :show
+  after_action :publish_question, only: :create
+
+  respond_to :js 
+  # respond_to :json, only: :create
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = @question.answers.build
-    # @answer.attachments.build
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    # @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def edit
   end
 
   def create
-    @question = Question.new(question_params.merge(user: current_user))
-    # @question = current_user.questions.create(question_params)
-    if @question.save
-      PrivatePub.publish_to "/questions", question: @question.to_json
-      redirect_to @question
-    else
-      render :new
-    end
+    respond_with(@question = Question.create(question_params.merge(user: current_user)))
   end
 
   def update
     @question.update(question_params) if current_user == @question.user
+    respond_with @question
   end
 
   def destroy
-    if current_user == @question.user
-      @question.destroy
-      redirect_to questions_path
-    else
-      # redirect_to question_path(@question)
-      redirect_to @question
-    end
+    @question.destroy if current_user == @question.user
+    respond_with @question
   end
 
   private
@@ -57,7 +48,11 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
   end
 
-  # def publish_question
-  #   PrivatePub.publish_to "/questions", question: QuestionPresenter.new(@question).to_json if @question.errors.empty?
-  # end
+  def build_answer
+    @answer = @question.answers.build
+  end
+
+  def publish_question
+    PrivatePub.publish_to("/questions", question: @question.to_json) if @question.valid?
+  end
 end
