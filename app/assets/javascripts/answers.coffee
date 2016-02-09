@@ -29,7 +29,7 @@ answer_pub = ->
   questionId = $('.question').data('questionId');
   channel = '/questions/' + questionId + '/answers'
   PrivatePub.subscribe channel, (data, channel) ->
-    # console.log(data)
+    # console.log('Answer pub:' + data)
     answer = $.parseJSON(data['answer'])
     if document.getElementById('answer-' + answer.id) == null 
       str = '<div class="answer" id="answer-' + answer.id + '"><p>' + answer.body + '</p></div>'

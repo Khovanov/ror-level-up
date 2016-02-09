@@ -7,17 +7,13 @@ h1 Questions list
 hr  
 = link_to 'Ask your question', new_question_path
 
+.questions
 - unless @questions.empty?
-  table.questions
-    tr
-      th Titles
-      th colspan="2"
-
-    - @questions.each do |question| 
-      tr
-        td = question.title 
-        td = link_to 'Details', question_path(question) 
+  - @questions.each do |question|
+    p
+      = question.title
+      =< link_to 'Details', question_path(question)
 - else
-  p No questions found.  
+  p No questions found.
 
 = subscribe_to "/questions"

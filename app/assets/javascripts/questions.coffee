@@ -23,10 +23,10 @@ vote_question = ->
 
 question_pub = ->
   PrivatePub.subscribe '/questions', (data, channel) ->
-    # console.log(data)
+    # console.log('Question pub:' + data)
     question = $.parseJSON(data['question'])
-    str = '<tr><td>' + question.title + '</td><td><a href="/questions/' + question.id + '">Details</a></td></tr>'
-    $('.questions tbody').append(str)
+    str = '<p>' + question.title + ' <a href="/questions/' + question.id + '">Details</p>'
+    $('.questions').append(str)
 
 # vote_rating = (arr) ->
 #   return arr.reduce (sum, vote) -> 

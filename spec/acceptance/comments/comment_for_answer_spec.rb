@@ -39,7 +39,7 @@ feature 'Comment for the answer', %q(
         click_on 'Add comment'
       end
       within '.answers' do
-        expect(page).to have_content "Body can't be blank"
+        expect(page).to have_content "body can't be blank"
       end
     end
   end

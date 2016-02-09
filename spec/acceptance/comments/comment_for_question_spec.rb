@@ -31,7 +31,7 @@ feature 'Comment for the question', %q(
       visit question_path(question)
       within '.question' do
         click_on 'Add comment'
-        expect(page).to have_content "Body can't be blank"
+        expect(page).to have_content "body can't be blank"
       end
     end
   end
