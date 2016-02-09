@@ -2,23 +2,12 @@ class CommentsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_commentable, only: :create #[:create, :update, :destroy]
+  after_action :publish_comment, only: :create  
+
+  respond_to :json
 
   def create
-    # @comment = @commentable.comments.create(comment_params.merge(user: current_user))
-    @comment = @commentable.comments.build(comment_params.merge(user: current_user))
-    if @comment.save
-      render :create
-      # render json: @comment
-      # PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json
-      # PrivatePub.publish_to "/questions/#{@commentable.id}/comments", comment: @comment.to_json
-      PrivatePub.publish_to @commentable.channel_path, comment: render_to_string(:create)  
-      # comment: render_to_string(:create), html: render_to_string(partial: 'comments/comment.html.slim', locals: {comment: @comment}) 
-      # comment: render_to_string(template: 'comments/create.json.jbuilder') 
-      # render nothing: true
-    else
-      render :error, status: :unprocessable_entity 
-      # format.json { render json: @comment.errors.full_messages, status: :unprocessable_entity }
-     end
+    respond_with(@comment = @commentable.comments.create(comment_params.merge(user: current_user)))
   end
 
   private
@@ -37,5 +26,9 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def publish_comment
+    PrivatePub.publish_to(@commentable.channel_path, comment: render_to_string(:create)) if @comment.valid?
   end
 end

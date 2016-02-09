@@ -46,6 +46,7 @@ feature 'Set best answer', %q(
       answer
       visit question_path(question)
       click_on 'Best answer'
+      sleep(3)
       within '.answers' do
         expect(page).to have_content 'The best answer'
         expect(page).to_not have_link 'Best answer'

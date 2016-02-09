@@ -2,19 +2,11 @@ class AttachmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_attachment, only: [:destroy]
 
+  respond_to :js
+
   def destroy
     return unless current_user == @attachment.attachable.user
-    @attachment.destroy
-    render :destroy
-
-    # if @attachment.destroyed?
-    #   if @attachment.attachable_type == 'Question'
-    #     @question = Question.find @attachment.attachable_id
-    #   elsif @attachment.attachable_type == 'Answer'
-    #     @answer = Answer.find @attachment.attachable_id
-    #   end
-    # end
-    # redirect_to :back
+    respond_with @attachment.destroy
   end
 
   private
