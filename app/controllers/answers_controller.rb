@@ -45,6 +45,5 @@ class AnswersController < ApplicationController
 
   def publish_answer
     PrivatePub.publish_to("/questions/#{@answer.question.id}/answers", answer: @answer.to_json) unless @answer.errors.present?
-    # PrivatePub.publish_to("/questions/#{@answer.question.id}/answers", answer: @answer.to_json) if @answer.valid?
   end
 end
