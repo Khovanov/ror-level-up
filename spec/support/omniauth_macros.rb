@@ -10,8 +10,8 @@ module OmniauthMacros
     })
   end
 
-  def mock_auth_inivalid(provider)
+  def mock_auth_invalid(provider)
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[provider] = :invalid_credentials
+    OmniAuth.config.mock_auth[provider] = {}
   end
 end

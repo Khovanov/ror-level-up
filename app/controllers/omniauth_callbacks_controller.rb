@@ -14,7 +14,12 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def user_auth
     # render json: request.env['omniauth.auth']
-    return unless User.credentials_valid?(auth)
+    unless User.credentials_valid?(auth)
+      redirect_to new_user_session_path 
+      set_flash_message(:notice, :failure, kind: 'OAuth provider', reason: 'invalid credentials' ) if is_navigational_format?      
+      return
+    end
+
     user = User.find_for_oauth(auth)
     if user && user.persisted?
       sign_in_and_redirect user, event: :authentication

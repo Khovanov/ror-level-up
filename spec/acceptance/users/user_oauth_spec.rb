@@ -17,9 +17,10 @@ feature 'OAuth sign in' do
 
     scenario 'with invalid credentials' do
       # OmniAuth.config.mock_auth[provider] = :invalid_credentials
-      mock_auth_inivalid :facebook
+      mock_auth_invalid :facebook
       click_on 'Sign in with Facebook'
-      expect(page).to have_content 'Could not authenticate you from Facebook because "Invalid credentials"'
+      expect(page).to have_content 'invalid credentials'
+      expect(current_path).to eq new_user_session_path
     end
   end
 
@@ -35,9 +36,10 @@ feature 'OAuth sign in' do
     end
 
     scenario 'with invalid credentials' do
-      mock_auth_inivalid :twitter
+      mock_auth_invalid :twitter
       click_on 'Sign in with Twitter'
-      expect(page).to have_content 'Could not authenticate you from Twitter because "Invalid credentials"'
+      expect(page).to have_content 'invalid credentials'
+      expect(current_path).to eq new_user_session_path
     end
   end
 end
