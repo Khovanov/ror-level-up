@@ -13,6 +13,7 @@
 /tmp
 
 config/database.yml
+config/secrets.yml
 
 # Ignore uploaded files
 /public/system

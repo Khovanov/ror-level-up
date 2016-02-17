@@ -53,6 +53,7 @@ class QuestionsController < ApplicationController
   end
 
   def publish_question
-    PrivatePub.publish_to("/questions", question: @question.to_json) if @question.valid?
+    # PrivatePub.publish_to("/questions", question: @question.to_json) if @question.valid?
+    PrivatePub.publish_to("/questions", question: @question.to_json) unless @question.errors.present?
   end
 end

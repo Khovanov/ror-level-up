@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+  devise_scope :user do
+    post '/finish_sign_in' => 'omniauth_callbacks#finish_sign_in'
+  end
+  
   root 'questions#index'
 
   resources :attachments, only: :destroy
