@@ -4,8 +4,9 @@ h1 Questions list
 - else
   => link_to 'Log in', new_user_session_path
   => link_to 'Register', new_user_registration_path
-hr  
-= link_to 'Ask your question', new_question_path
+hr
+- if can?(:create, Question)
+  = link_to 'Ask your question', new_question_path
 
 .questions
 - unless @questions.empty?

@@ -3,28 +3,29 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_question
-  before_action :load_answer, only: [:destroy, :update, :best]
+  # before_action :load_answer, only: [:destroy, :update, :best]
+  before_action :load_answer, except: :create
   after_action :publish_answer, only: :create
 
   respond_to :js 
   # respond_to :json, only: :create
+  authorize_resource
 
   def create
     respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def update
-    @answer.update(answer_params) if current_user == @answer.user
+    @answer.update(answer_params) 
     respond_with @answer
   end
 
   def destroy
-    @answer.destroy if current_user == @answer.user
-    respond_with @answer
+    respond_with @answer.destroy
   end
 
   def best
-    @answer.best! if @question.user == current_user
+    @answer.best!
   end
 
   private
