@@ -9,8 +9,7 @@ feature 'Create Question', %q(
 
   scenario 'Unauthenticated user try creates question' do
     visit questions_path
-    click_on 'Ask your question'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_link 'Ask your question'
   end
 
   describe 'Authenticated user' do

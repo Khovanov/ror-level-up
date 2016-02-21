@@ -2,12 +2,15 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: [:show, :index]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  # before_action :load_question, only: [:show, :edit, :update, :destroy, :vote_up, :vote_down, :vote_cancel]
+  before_action :load_question, except: [:index, :new, :create]
   before_action :build_answer, only: :show
   after_action :publish_question, only: :create
+  # skip_authorization_check
 
   respond_to :js 
   # respond_to :json, only: :create
+  authorize_resource
 
   def index
     respond_with(@questions = Question.all)
@@ -29,13 +32,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params) if current_user == @question.user
+    @question.update(question_params)
     respond_with @question
   end
 
   def destroy
-    @question.destroy if current_user == @question.user
-    respond_with @question
+    respond_with @question.destroy
   end
 
   private
