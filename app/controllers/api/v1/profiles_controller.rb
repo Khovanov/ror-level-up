@@ -8,6 +8,10 @@ class Api::V1::ProfilesController < ApplicationController
     respond_with current_resource_owner
   end
 
+  def others
+    respond_with User.where.not(id: current_resource_owner)
+  end
+
   protected
 
   def current_resource_owner
