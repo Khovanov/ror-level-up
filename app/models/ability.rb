@@ -41,5 +41,7 @@ class Ability
     # cannot :vote, [Question, Answer], user_id: user.id
 
     can :destroy, Attachment, attachable: { user_id: user.id }
+
+    can [:me, :others], User, id: user.id
   end
 end
