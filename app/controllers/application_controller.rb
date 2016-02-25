@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
-      format.json { render 'shared/exception', status: :unauthorized, locals: {exception: exception} }
-      format.js { render 'shared/exception', status: :unauthorized, locals: {exception: exception} }
-      format.html { render 'shared/exception', status: :unauthorized, locals: {exception: exception} }
+      format.json { render 'shared/exception', status: :forbidden, locals: {exception: exception} }
+      format.js { render 'shared/exception', status: :forbidden, locals: {exception: exception} }
+      format.html { render 'shared/exception', status: :forbidden, locals: {exception: exception} }
       # Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
       # format.js { render nothing: true, error: exception.message }
       # format.html { redirect_to :back, alert: exception.message }
