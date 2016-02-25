@@ -102,4 +102,61 @@ describe 'Questions API' do
       end
     end
   end
+
+  describe 'POST /create' do
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        post '/api/v1/questions', format: :json
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if access_token is invalid' do
+        post '/api/v1/questions', format: :json, access_token: '1234'
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:user) { create :user }
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+      let(:create_question) do 
+        post '/api/v1/questions', 
+            format: :json, 
+            access_token: access_token.token,
+            question: attributes_for(:question) 
+      end
+
+      let(:create_invalid_question) do 
+        post '/api/v1/questions', 
+            format: :json, 
+            access_token: access_token.token,
+            question: attributes_for(:invalid_question) 
+      end
+
+
+      it 'returns 200 status code' do
+        create_question
+        expect(response).to be_success
+      end
+
+      it 'saves new question' do
+        expect { create_question }.to change(Question, :count).by(1)
+      end
+
+      it 'belongs to the user' do
+        expect { create_question }.to change(user.questions, :count).by(1)
+      end
+
+      context 'with invalid attributes' do
+        it 'does not save the question' do
+          expect { create_invalid_question }.to_not change(Question, :count)
+        end
+
+        it 'returns unprocessable entity status' do
+          create_invalid_question
+          expect(response.status).to eql 422
+        end
+      end
+    end
+  end
 end

@@ -97,4 +97,61 @@ describe 'Answers API' do
       end
     end
   end
+
+  describe 'POST /create' do
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        post answers_url, format: :json
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if access_token is invalid' do
+        post answers_url, format: :json, access_token: '1234'
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:user) { create :user }
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+      let(:create_answer) do 
+        post answers_url, 
+            format: :json, 
+            access_token: access_token.token,
+            answer: attributes_for(:answer)
+      end
+
+      let(:create_invalid_answer) do 
+        post answers_url, 
+            format: :json, 
+            access_token: access_token.token,
+            answer: attributes_for(:invalid_answer) 
+      end
+
+
+      it 'returns 200 status code' do
+        create_answer
+        expect(response).to be_success
+      end
+
+      it 'saves new answer' do
+        expect { create_answer }.to change(question.answers, :count).by(1)
+      end
+
+      it 'belongs to the user' do
+        expect { create_answer }.to change(user.answers, :count).by(1)
+      end
+
+      context 'with invalid attributes' do
+        it 'does not save the answer' do
+          expect { create_invalid_answer }.to_not change(Answer, :count)
+        end
+
+        it 'returns unprocessable entity status' do
+          create_invalid_answer
+          expect(response.status).to eql 422
+        end
+      end
+    end
+  end
 end
