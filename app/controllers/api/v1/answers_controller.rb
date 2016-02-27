@@ -1,5 +1,4 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-  # authorize_resource Answer
   authorize_resource class: Answer
   before_action :load_question, only: [:index, :create]
 
@@ -13,7 +12,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def create
-    respond_with @question.answers.create(answer_params.merge(user: current_resource_owner)), location: question_path(@question)
+    respond_with @question.answers.create(answer_params.merge(user: current_user)), location: question_path(@question)
   end
 
   private

@@ -1,6 +1,5 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  # authorize_resource class: Question
-  authorize_resource Question
+  authorize_resource class: Question
 
   def index
     # https://github.com/rails-api/active_model_serializers/blob/master/docs/general/rendering.md#explicit-serializer
@@ -14,7 +13,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def create
-    respond_with current_resource_owner.questions.create(question_params)
+    respond_with current_user.questions.create(question_params)
   end
 
   private
