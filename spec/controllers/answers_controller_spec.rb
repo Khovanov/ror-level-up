@@ -9,7 +9,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:vote_up_answer) { create :vote_up_answer, votable: answer, user: another_user }
 
   describe 'POST #create' do
-    let(:create_answer) do
+    let(:subject) do
       post :create,
            answer: attributes_for(:answer),
            question_id: question,
@@ -24,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'when user unauthenticated' do
       it 'does not save the answer' do
-        expect { create_answer }.to_not change(Answer, :count)
+        expect { subject }.to_not change(Answer, :count)
       end
     end
 
@@ -32,20 +32,24 @@ RSpec.describe AnswersController, type: :controller do
       before { login user }
 
       it 'saves new answer in the database' do
-        expect { create_answer }.to change(question.answers, :count).by(1)
+        expect { subject }.to change(question.answers, :count).by(1)
         # change(Answer, :count)
         # change { question.answers.count }
       end
 
       it 'checks that the answer belongs to the user' do
-        expect { create_answer }.to change(user.answers, :count).by(1)
+        expect { subject }.to change(user.answers, :count).by(1)
       end
 
       it 'render create template' do
-        create_answer
+        subject
         # expect(response).to redirect_to question_path(question)
         expect(response).to render_template :create
       end
+
+      it_behaves_like "Publishable" do
+        let(:channel) { "/questions/#{question.id}/answers" }
+      end     
     end
 
     context 'with invalid attributes' do

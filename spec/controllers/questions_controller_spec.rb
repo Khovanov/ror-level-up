@@ -75,7 +75,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:create_question) do
+    let(:subject) do
       post :create,
            question: attributes_for(:question)
     end
@@ -85,7 +85,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
     context 'when user unauthenticated' do
       it 'does not save the question' do
-        expect { create_question }.to_not change(Question, :count)
+        expect { subject }.to_not change(Question, :count)
       end
     end
 
@@ -98,17 +98,21 @@ RSpec.describe QuestionsController, type: :controller do
         # count = Question.count
         # post :create, question: attributes_for(:question)
         # expect(Question.count).to eq count + 1
-        expect { create_question }.to change(Question, :count).by(1)
+        expect { subject }.to change(Question, :count).by(1)
       end
 
       it 'checks that the question belongs to the user' do
-        expect { create_question }.to change(user.questions, :count).by(1)
+        expect { subject }.to change(user.questions, :count).by(1)
       end
 
       it 'redirect to show view' do
-        create_question
+        subject
         expect(response).to redirect_to question_path(assigns(:question))
       end
+
+      it_behaves_like "Publishable" do
+        let(:channel) { "/questions" }
+      end      
     end
 
     context 'with invalid attributes' do
