@@ -133,8 +133,7 @@ describe 'Questions API' do
             question: attributes_for(:invalid_question) 
       end
 
-
-      it 'returns 200 status code' do
+      it 'returns 201 status code' do
         create_question
         expect(response).to be_success
       end
