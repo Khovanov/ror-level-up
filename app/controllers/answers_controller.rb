@@ -2,7 +2,8 @@ class AnswersController < ApplicationController
   include Voted
 
   before_action :authenticate_user!
-  before_action :load_question
+  # before_action :load_question
+  before_action :load_question, only: [:create, :update, :destroy, :best]
   # before_action :load_answer, only: [:destroy, :update, :best]
   before_action :load_answer, except: :create
   after_action :publish_answer, only: :create
@@ -37,7 +38,8 @@ class AnswersController < ApplicationController
   def load_answer
     # @answer = Answer.find(params[:id])
     # @answer = @question.answers.find_by(id: params[:id])
-    @answer = @question.answers.find(params[:id])
+    @answer = Answer.find(params[:id])
+    # @answer = @question.answers.find(params[:id])
   end
 
   def answer_params

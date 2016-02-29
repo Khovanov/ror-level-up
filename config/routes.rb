@@ -41,6 +41,9 @@ Rails.application.routes.draw do
       patch :best, on: :member
     end
   end
+
+  resources :answers, concerns: :votable 
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

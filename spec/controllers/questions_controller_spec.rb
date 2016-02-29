@@ -4,7 +4,8 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user) { create :user }
   let(:another_user) { create :user }
   let(:question) { create :question, user: user }
-  let(:vote_up_question) { create :vote_up_question, votable: question, user: another_user }
+
+  it_behaves_like "Controllers votable", Question 
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -75,7 +76,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:create_question) do
+    let(:subject) do
       post :create,
            question: attributes_for(:question)
     end
@@ -85,7 +86,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
     context 'when user unauthenticated' do
       it 'does not save the question' do
-        expect { create_question }.to_not change(Question, :count)
+        expect { subject }.to_not change(Question, :count)
       end
     end
 
@@ -98,17 +99,21 @@ RSpec.describe QuestionsController, type: :controller do
         # count = Question.count
         # post :create, question: attributes_for(:question)
         # expect(Question.count).to eq count + 1
-        expect { create_question }.to change(Question, :count).by(1)
+        expect { subject }.to change(Question, :count).by(1)
       end
 
       it 'checks that the question belongs to the user' do
-        expect { create_question }.to change(user.questions, :count).by(1)
+        expect { subject }.to change(user.questions, :count).by(1)
       end
 
       it 'redirect to show view' do
-        create_question
+        subject
         expect(response).to redirect_to question_path(assigns(:question))
       end
+
+      it_behaves_like "Publishable" do
+        let(:channel) { "/questions" }
+      end      
     end
 
     context 'with invalid attributes' do
@@ -199,112 +204,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'render template update' do
         expect(response).to render_template :update
       end
-    end
-  end
-
-  describe 'PATCH #vote_up' do
-    let(:vote_up) do
-      patch :vote_up, id: question, format: :json
-      question.reload
-    end
-
-    context 'when user unauthenticated' do
-      it 'can`t vote for the question' do
-        vote_up
-        expect(question.votes.rating).to_not eq 1
-      end
-    end
-
-    context 'author of question' do
-      before { login user }
-      it 'can`t vote for the own question' do
-        vote_up
-        expect(question.votes.rating).to_not eq 1
-      end
-    end
-
-    context 'when user try vote up for question' do
-      before { login another_user }
-      it 'change up rating' do
-        vote_up
-        expect(question.votes.rating).to eq 1
-      end
-
-      it 'render template vote' do
-        vote_up
-        expect(response).to render_template :vote
-      end
-    end
-  end
-
-  describe 'PATCH #vote_down' do
-    let(:vote_down) do
-      patch :vote_down, id: question, format: :json
-      question.reload
-    end
-
-    context 'when user unauthenticated' do
-      it 'can`t vote for the question' do
-        vote_down
-        expect(question.votes.rating).to_not eq -1
-      end
-    end
-
-    context 'author of question' do
-      before { login user }
-      it 'can`t vote for the own question' do
-        vote_down
-        expect(question.votes.rating).to_not eq -1
-      end
-    end
-
-    context 'when user try vote down for question' do
-      before { login another_user }
-      it 'change down rating' do
-        vote_down
-        expect(question.votes.rating).to eq -1
-      end
-
-      it 'render template vote' do
-        vote_down
-        expect(response).to render_template :vote
-      end
-    end
-  end
-
-  describe 'PATCH #vote_cancel' do
-    let(:vote_cancel) do
-      vote_up_question
-      patch :vote_cancel, id: question, format: :json
-      question.reload
-    end
-
-    context 'when user unauthenticated' do
-      it 'can`t cancel vote' do
-        vote_cancel
-        expect(question.votes.rating).to_not eq 0
-      end
-    end
-
-    context 'author of question' do
-      before { login user }
-      it 'can`t cancel vote for the own question' do
-        vote_cancel
-        expect(question.votes.rating).to_not eq 0
-      end
-    end
-
-    context 'when user try cancel own vote' do
-      before { login another_user }
-      it 'change to 0 rating' do
-        vote_cancel
-        expect(question.votes.rating).to eq 0
-      end
-
-      it 'render template vote' do
-        vote_cancel
-        expect(response).to render_template :vote
-      end 
     end
   end
 

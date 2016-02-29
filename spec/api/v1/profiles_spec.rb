@@ -2,25 +2,14 @@ require 'rails_helper'
 
 describe 'Profile API' do
   describe 'GET /me' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/me', format: :json
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/profiles/me', format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      before { do_request access_token: access_token.token }
 
-      before { get '/api/v1/profiles/me', format: :json, access_token: access_token.token }
-
-      it 'returns 200 status' do
+      it 'returns 201 status code' do
         expect(response).to be_success
       end
 
@@ -36,29 +25,21 @@ describe 'Profile API' do
         end
       end
     end
+    def do_request(options = {})
+      get '/api/v1/profiles/me', { format: :json }.merge(options)
+    end
   end
 
   describe 'GET /others' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/others', format: :json
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/profiles/others', format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:me) { create(:user) }
       let!(:others) { create_list(:user, 3) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      before { do_request access_token: access_token.token }
 
-      before { get '/api/v1/profiles/others', format: :json, access_token: access_token.token }
-
-      it 'returns 200 status' do
+      it 'returns 201 status code' do
         expect(response).to be_success
       end
 
@@ -69,6 +50,9 @@ describe 'Profile API' do
       it 'not contains me' do
         expect(response.body).to_not include_json(me.to_json).at_path("users")
       end
+    end
+    def do_request(options = {})
+      get '/api/v1/profiles/others', { format: :json }.merge(options)
     end
   end
 end
