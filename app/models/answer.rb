@@ -22,4 +22,13 @@ class Answer < ActiveRecord::Base
   def channel_path
     "/questions/#{question_id}/comments"
   end 
+
+  after_create :calculate_rating
+
+  private
+
+  def calculate_rating
+    Reputation.delay.calculate(self)
+    # Reputation.calculate(self)
+  end  
 end
