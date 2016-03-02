@@ -7,6 +7,7 @@ class Question < ActiveRecord::Base
   belongs_to :user
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
+  scope :yesterdays, -> { where(created_at: Date.yesterday..Date.today) }
 
   validates :title, :body, :user_id, presence: true
   validates :title, :body, length: { minimum: 10 }
