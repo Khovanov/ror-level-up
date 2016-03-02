@@ -23,12 +23,11 @@ class Answer < ActiveRecord::Base
     "/questions/#{question_id}/comments"
   end 
 
-  after_create :calculate_rating
+  after_create :update_reputation
 
   private
 
-  def calculate_rating
-    Reputation.delay.calculate(self)
-    # Reputation.calculate(self)
-  end  
+  def update_reputation
+    CalculateReputationJob.perform_later(self)
+  end
 end

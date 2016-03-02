@@ -20,4 +20,11 @@ RSpec.describe Question, type: :model do
     it { should validate_length_of(:title).is_at_least(10) }
     it { should validate_length_of(:body).is_at_least(10) }
   end
+
+  describe 'reputation' do
+    let(:user) { create(:user) }
+    subject { build(:question, user: user) }
+
+    it_behaves_like 'calculates reputation'
+  end  
 end

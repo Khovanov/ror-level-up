@@ -17,15 +17,9 @@ class Question < ActiveRecord::Base
 
   after_create :update_reputation
 
-  protected
+  private
 
   def update_reputation
-    self.delay.calculate_reputation
-    # self.calculate_reputation
+    CalculateReputationJob.perform_later(self)
   end
-
-  def calculate_reputation
-    reputation = Reputation.calculate(self)
-    # self.user.update(reputation: reputation)
-  end  
 end
