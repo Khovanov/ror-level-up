@@ -7,6 +7,7 @@ class Question < ActiveRecord::Base
   has_many :attachments, as: :attachable, dependent: :destroy
   belongs_to :user
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
+  after_create :subscribe_owner
 
   scope :yesterdays, -> { where(created_at: Date.yesterday..Date.today) }
 
@@ -23,5 +24,9 @@ class Question < ActiveRecord::Base
 
   def update_reputation
     CalculateReputationJob.perform_later(self)
+  end
+
+  def subscribe_owner
+    subscribe(self.user)
   end
 end
