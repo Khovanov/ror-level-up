@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe DailyMailer, type: :mailer do
   describe "digest" do
     let!(:user) { create :user }
-    let!(:question) { create :question, created_at: Date.yesterday.to_time(:utc) }
-    # let!(:question) { create :question, created_at: Date.yesterday + 3.hour }
+    let!(:question) { create :question, created_at: Time.current.yesterday }
     let(:mail) { DailyMailer.digest user }
 
     it "renders the headers" do

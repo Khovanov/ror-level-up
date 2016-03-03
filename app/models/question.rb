@@ -9,7 +9,7 @@ class Question < ActiveRecord::Base
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
   after_create :subscribe_owner
 
-  scope :yesterdays, -> { where(created_at: Date.yesterday..Date.today) }
+  scope :yesterdays, -> { where(created_at: Time.current.yesterday.all_day) }
 
   validates :title, :body, :user_id, presence: true
   validates :title, :body, length: { minimum: 10 }

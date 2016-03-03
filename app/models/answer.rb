@@ -12,7 +12,8 @@ class Answer < ActiveRecord::Base
 
   default_scope -> { order(best: :desc).order(created_at: :asc) }
 
-  after_create :subscription_job
+  after_commit :subscription_job
+  after_commit :update_reputation
 
   def best!
     transaction do
@@ -24,8 +25,6 @@ class Answer < ActiveRecord::Base
   def channel_path
     "/questions/#{question_id}/comments"
   end 
-
-  after_create :update_reputation
 
   private
 
