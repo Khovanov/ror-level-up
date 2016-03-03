@@ -12,6 +12,8 @@ class Answer < ActiveRecord::Base
 
   default_scope -> { order(best: :desc).order(created_at: :asc) }
 
+  after_create :subscription_job
+
   def best!
     transaction do
       question.answers.update_all best: false
@@ -29,5 +31,9 @@ class Answer < ActiveRecord::Base
 
   def update_reputation
     CalculateReputationJob.perform_later(self)
+  end
+
+  def subscription_job
+    SubscriptionJob.perform_later(self)
   end
 end
