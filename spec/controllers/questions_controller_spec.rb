@@ -207,6 +207,74 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'PATCH #subscribe' do
+    let(:subscribe) do
+      patch :subscribe, id: question, format: :json
+      question.reload
+    end
+
+    context 'when user unauthenticated' do
+      it 'can`t subscribe' do
+        expect { subscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context "author of question" do
+      before { login user }
+      it 'can`t subscribe' do
+        expect { subscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context 'when user try subscribe' do
+      before { login another_user }
+      it 'subscribed' do
+        subscribe
+        expect(question.subscribed? another_user).to be true
+      end
+
+      it 'render template subscribed' do
+        subscribe
+        expect(response).to render_template :subscribed
+      end
+    end
+  end
+
+  describe 'PATCH #unsubscribe' do
+    let(:unsubscribe) do
+      patch :unsubscribe, id: question, format: :json
+      question.reload
+    end
+
+    before {create :subscription, user: another_user, question: question}
+
+    context 'when user unauthenticated' do
+      it 'can`t subscribe' do
+        expect { unsubscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context "author of question" do
+      before { login user }
+      it 'can`t unsubscribe' do
+        expect { unsubscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context 'when user try unsubscribe' do
+      before { login another_user }
+      it 'unsubscribe' do
+        unsubscribe
+        expect(question.subscribed? another_user).to be false
+      end
+
+      it 'render template subscribed' do
+        unsubscribe
+        expect(response).to render_template :subscribed
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:destroy_question) do
       delete :destroy,

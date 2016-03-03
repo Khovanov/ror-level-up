@@ -6,11 +6,12 @@ class QuestionsController < ApplicationController
   before_action :load_question, except: [:index, :new, :create]
   before_action :build_answer, only: :show
   after_action :publish_question, only: :create
-  # skip_authorization_check
+  # skip_authorization_check 
 
   respond_to :js 
-  # respond_to :json, only: :create
-  authorize_resource
+  # respond_to :json, only: [:subscribe, :unsubscribe]
+  
+  authorize_resource 
 
   def index
     respond_with(@questions = Question.all)
@@ -38,6 +39,16 @@ class QuestionsController < ApplicationController
 
   def destroy
     respond_with @question.destroy
+  end
+
+  def subscribe
+    @question.subscribe(current_user) 
+    render 'subscriptions/subscribed' 
+  end
+
+  def unsubscribe
+    @question.unsubscribe(current_user) 
+    render 'subscriptions/subscribed' 
   end
 
   private

@@ -56,6 +56,16 @@ describe Ability do
     it { should be_able_to :vote, answer_another_user }
     it { should_not be_able_to :vote, answer }
 
+    context 'subscribe' do   
+      it { should be_able_to :subscribe, question_another_user }
+      it { should_not be_able_to :subscribe, question }
+    end
+    context 'unsubscribe' do
+        before {create :subscription, user: user, question: question_another_user}
+        it { should be_able_to :unsubscribe, question_another_user }
+        it { should_not be_able_to :unsubscribe, question }
+    end
+
     it { should be_able_to :destroy, attachment }
     it { should_not be_able_to :destroy, attachment_question_another_user }
   end

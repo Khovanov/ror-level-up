@@ -1,0 +1,1 @@
+json.subscribed @question.subscribed?(current_user)

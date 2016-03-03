@@ -21,6 +21,17 @@ vote_question = ->
       else
         target.removeClass("has-vote")
 
+subscribe_question = ->
+  $('.question').on 'ajax:success', (e, data, status, xhr) ->
+    target = $(e.target).parents('.question-subscription')
+    if (target.hasClass('question-subscription'))
+      subscription = $.parseJSON(xhr.responseText)
+      # console.log(subscription.subscribed)
+      if (subscription.subscribed == true)
+         target.addClass('subscribed')
+      else
+         target.removeClass('subscribed')
+
 question_pub = ->
   PrivatePub.subscribe '/questions', (data, channel) ->
     # console.log('Question pub:' + data)
@@ -36,4 +47,5 @@ question_pub = ->
 $ ->
   edit_question()
   vote_question()
+  subscribe_question()
   question_pub()
