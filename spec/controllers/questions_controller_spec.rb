@@ -12,7 +12,7 @@ RSpec.describe QuestionsController, type: :controller do
     # @questions = FactoryGirl.create_list(:question, 2)
     before { get :index }
 
-    it 'poulates an array of all questions' do
+    it 'populates an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
 
@@ -79,6 +79,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:subject) do
       post :create,
            question: attributes_for(:question)
+
     end
     let(:create_invalid_question) do
       post :create,
@@ -100,6 +101,10 @@ RSpec.describe QuestionsController, type: :controller do
         # post :create, question: attributes_for(:question)
         # expect(Question.count).to eq count + 1
         expect { subject }.to change(Question, :count).by(1)
+      end
+
+      it 'create new subscription in the database' do
+        expect { subject }.to change(user.subscriptions, :count).by(1)
       end
 
       it 'checks that the question belongs to the user' do
@@ -203,6 +208,75 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'render template update' do
         expect(response).to render_template :update
+      end
+    end
+  end
+
+  describe 'PATCH #subscribe' do
+    let!(:question) { create :question, user: user }
+    let(:subscribe) do
+      patch :subscribe, id: question, format: :json
+      question.reload
+    end
+    
+    context 'when user unauthenticated' do
+      it 'can`t subscribe' do
+        expect { subscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context "author of question" do
+      before { login user }
+      it 'can`t subscribe' do
+        expect { subscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context 'when user try subscribe' do
+      before { login another_user }
+      it 'subscribed' do
+        subscribe
+        expect(question.subscribed? another_user).to be true
+      end
+
+      it 'render template subscribed' do
+        subscribe
+        expect(response).to render_template :subscribed
+      end
+    end
+  end
+
+  describe 'PATCH #unsubscribe' do
+    let(:unsubscribe) do
+      patch :unsubscribe, id: question, format: :json
+      question.reload
+    end
+
+    before {create :subscription, user: another_user, question: question}
+
+    context 'when user unauthenticated' do
+      it 'can`t subscribe' do
+        expect { unsubscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context "author of question" do
+      before { login user }
+      it 'can`t unsubscribe' do
+        expect { unsubscribe }.to_not change(Subscription, :count)
+      end
+    end
+
+    context 'when user try unsubscribe' do
+      before { login another_user }
+      it 'unsubscribe' do
+        unsubscribe
+        expect(question.subscribed? another_user).to be false
+      end
+
+      it 'render template subscribed' do
+        unsubscribe
+        expect(response).to render_template :subscribed
       end
     end
   end

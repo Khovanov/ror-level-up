@@ -2,6 +2,7 @@ p: strong = @question.title
 p = @question.body
 = render 'attachments/attachment_list', resource: @question
 = render 'questions/vote', question: @question
+= render 'questions/subscription', question: @question
 /#- if user_signed_in?
 - if can?(:crud, @question)  
   / # = link_to 'Edit', edit_question_path(@question)

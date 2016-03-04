@@ -1,4 +1,11 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   use_doorkeeper
 
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
@@ -31,10 +38,17 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :subsribable do
+    member do
+      patch :subscribe
+      patch :unsubscribe
+    end
+  end
+
   # resources :questions, concerns: [:votable, :commentable, :subsribable], except: [:edit], shallow: true do
   #   resources :answers, concerns: [:votable, :commentable], except: [:index, :show, :edit] do
 
-  resources :questions, concerns: :votable do
+  resources :questions, concerns: [:votable, :subsribable] do
     resources :comments, only: :create, defaults: {commentable: 'questions'}
     resources :answers, concerns: :votable do
       resources :comments, only: :create, defaults: {commentable: 'answers'}

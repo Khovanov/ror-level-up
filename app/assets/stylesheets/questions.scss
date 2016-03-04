@@ -7,3 +7,8 @@
 .question-vote-cancel-link {display: none;}
 .has-vote .question-vote-cancel-link {display: inline-block;}
 .has-vote .question-vote-up-link, .has-vote .question-vote-down-link {display: none;}
+
+.question-subscribe-link {display: inline-block;}
+.subscribed .question-subscribe-link {display: none;}
+.question-unsubscribe-link {display: none;}
+.subscribed .question-unsubscribe-link {display: inline-block;}

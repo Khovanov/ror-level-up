@@ -37,6 +37,14 @@ class Ability
     can :vote, [Question, Answer] do |obj|
       obj.user_id != user.id
     end
+
+    can :subscribe, Question do |question|
+      question.user_id != user.id  && !question.subscribed?(user)
+    end
+    can :unsubscribe, Question do |question|
+      question.user_id != user.id && question.subscribed?(user)
+    end
+
     # can :vote, [Question, Answer]
     # cannot :vote, [Question, Answer], user_id: user.id
 

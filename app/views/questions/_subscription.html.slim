@@ -1,0 +1,14 @@
+div[class="question-subscription #{ 'subscribed' if question.subscribed?(current_user)}"]
+  - if can?(:subscribe, question) || can?(:unsubscribe, question)
+    => link_to 'Subscribe', 
+                [:subscribe, question],
+                method: :patch,
+                data: { type: :json },
+                class: "question-subscribe-link",
+                remote: true
+    => link_to 'Unsubscribe', 
+                [:unsubscribe, question],
+                method: :patch,
+                data: { type: :json },
+                class: "question-unsubscribe-link",
+                remote: true

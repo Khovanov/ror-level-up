@@ -1,0 +1,7 @@
+DailyMailer#digest
+h1
+ = @greeting 
+p List of yesterdays questions
+- @questions.each do |question|
+  p 
+    =< link_to "#{question.title}", question_url(id: question, only_path: true)
