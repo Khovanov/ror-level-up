@@ -1,6 +1,6 @@
 class Search
 
   def self.question(query)
-    Question.search query
+    ThinkingSphinx.search query
   end
 end
