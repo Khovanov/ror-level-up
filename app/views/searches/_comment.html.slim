@@ -1,0 +1,7 @@
+h2 Comment:
+- if comment.commentable.class == Question
+  p = link_to truncate(comment.body, length: 200), question_path(comment.commentable)
+- else
+  p = link_to truncate(comment.body, length: 200), question_path(comment.commentable.question)
+  / #p = truncate(comment.body, length: 200)
+  / #p = truncate(comment.body, length: 200)

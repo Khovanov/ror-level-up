@@ -2,11 +2,11 @@ class SearchesController < ApplicationController
   skip_authorization_check
 
   def index
-    if params[:query].present?
-      @search = Search.question(params[:query]) 
+    if Search.params_valid?(params[:query], params[:options])
+      @search = Search.main(params[:query], params[:options]) 
       respond_with @search
     else
-      flash[:notice] = "Empty query"
+      flash[:notice] = "Invalid query"
       redirect_to :back
     end
   end

@@ -1,0 +1,6 @@
+= form_tag searches_path, method: :get  
+  =< search_field_tag :query, params[:query], placeholder: 'Query'
+  =< select_tag(:options, 
+               options_for_select(Search::SEARCH_OPTIONS, 
+                                  params[:options]), prompt: 'All')
+  =< submit_tag 'Search', name: nil
