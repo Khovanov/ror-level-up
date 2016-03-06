@@ -5,6 +5,11 @@ h1 Questions list
   => link_to 'Log in', new_user_session_path
   => link_to 'Register', new_user_registration_path
 hr
+
+= form_tag searches_path, method: :get  
+  = search_field_tag :query, params[:query], placeholder: 'Query'
+  = submit_tag 'Search', name: nil
+
 - if can?(:create, Question)
   = link_to 'Ask your question', new_question_path
 
