@@ -14,4 +14,3 @@ RSpec.configure do |config|
   #   index if example.metadata[:js]
   # end
 end
-

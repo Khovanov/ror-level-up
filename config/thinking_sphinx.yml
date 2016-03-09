@@ -1,5 +1,6 @@
 test:
   mysql41: 9307
+  indices_location: "/home/vagrant/db/sphinx/test"
 
 development:
   mysql41: 9306
