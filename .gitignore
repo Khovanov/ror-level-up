@@ -13,6 +13,7 @@
 /tmp
 
 config/database.yml
+config/private_pub.yml
 config/secrets.yml
 
 # Ignore uploaded files
