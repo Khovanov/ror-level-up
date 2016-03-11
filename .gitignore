@@ -23,3 +23,8 @@ config/secrets.yml
 
 # Ignore foreman
 procfile
+
+config/*.sphinx.conf
+db/sphinx
+
+dump.rdb

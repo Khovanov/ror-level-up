@@ -1,0 +1,7 @@
+h1 Search results:
+= link_to 'Back to list', questions_path 
+- if @search.present?
+  - @search.each do |object|
+    = render partial: "#{object.class.name.downcase}", object: object
+- else
+    p No results.

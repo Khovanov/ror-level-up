@@ -1,0 +1,4 @@
+rails: rails s -b 0.0.0.0
+pub: rackup private_pub.ru -s thin -E production -o 0.0.0.0
+redis: redis-server
+sidekiq: sidekiq -q default -q mailers
