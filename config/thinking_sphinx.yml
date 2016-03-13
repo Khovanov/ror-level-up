@@ -6,7 +6,8 @@ development:
   mysql41: 9306
 
 production:
-  pid_file: "~/rlu/shared/tmp/searchd.pid"
-  indices_location: "~/rlu/shared/db/sphinx"
-  configuration_file: "~/rlu/shared/config/production.sphinx.conf"
-  binlog_path: "~/rlu/shared/log/binlog"
+  mysql41: 9306
+  pid_file: "/home/deploy/rlu/shared/tmp/pids/searchd.pid"
+  indices_location: "/home/deploy/rlu/shared/db/sphinx"
+  configuration_file: "/home/deploy/rlu/shared/config/production.sphinx.conf"
+  binlog_path: "/home/deploy/rlu/shared/log/binlog"
