@@ -48,6 +48,19 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 
 #   after :publishing, :restart
 # end
+namespace :deploy do
+
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Your restart mechanism here, for example:
+      invoke 'unicorn:restart'
+    end
+  end
+
+  after :publishing, :restart
+end
+
 
 namespace :private_pub do
   desc 'Start private_pub server'
