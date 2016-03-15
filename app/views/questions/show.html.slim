@@ -1,4 +1,4 @@
-- cache @question do
+- cache_unless current_user.try(:admin), @question do
   h1 Question
   = link_to 'Back to list', questions_path 
   .question data={ question_id: "#{@question.id}" }
