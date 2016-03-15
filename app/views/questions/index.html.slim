@@ -10,13 +10,14 @@ hr
 - if can?(:create, Question)
   = link_to 'Ask your question', new_question_path
 
-.questions
-- unless @questions.empty?
-  - @questions.each do |question|
-    p
-      = question.title
-      =< link_to 'Details', question_path(question)
-- else
-  p No questions found.
+- cache collection_cache_key_for :question do
+  .questions
+  - unless @questions.empty?
+    - @questions.each do |question|
+      p
+        = question.title
+        =< link_to 'Details', question_path(question)
+  - else
+    p No questions found.
 
 = subscribe_to "/questions"

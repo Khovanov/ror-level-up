@@ -2,7 +2,8 @@
   div[class="answer" id="answer-#{answer.id}"]
     -if answer.best?
       p The best answer 
-    p = answer.body 
+    - cache answer do
+      p = answer.body 
     = render 'attachments/attachment_list', resource: answer
     = render 'answers/vote', answer: answer
     - if can?(:crud, answer)
