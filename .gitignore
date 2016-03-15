@@ -29,3 +29,5 @@ config/*.sphinx.conf
 db/sphinx
 
 dump.rdb
+
+/.idea/*
