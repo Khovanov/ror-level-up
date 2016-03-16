@@ -2,7 +2,7 @@ class Answer < ActiveRecord::Base
   include Votable
   include Commentable
   
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
   has_many :attachments, as: :attachable, dependent: :destroy
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true

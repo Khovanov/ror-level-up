@@ -268,6 +268,22 @@ GEM
     rake (10.5.0)
     rdoc (4.2.1)
     redis (3.2.2)
+    redis-actionpack (4.0.1)
+      actionpack (~> 4)
+      redis-rack (~> 1.5.0)
+      redis-store (~> 1.1.0)
+    redis-activesupport (4.1.5)
+      activesupport (>= 3, < 5)
+      redis-store (~> 1.1.0)
+    redis-rack (1.5.0)
+      rack (~> 1.5)
+      redis-store (~> 1.1.0)
+    redis-rails (4.0.0)
+      redis-actionpack (~> 4)
+      redis-activesupport (~> 4)
+      redis-store (~> 1.1.0)
+    redis-store (1.1.7)
+      redis (>= 2.2)
     ref (2.0.0)
     remotipart (1.2.1)
     responders (2.1.1)
@@ -424,6 +440,7 @@ DEPENDENCIES
   poltergeist
   private_pub
   rails (= 4.2.5)
+  redis-rails
   remotipart
   responders (~> 2.0)
   rspec-rails

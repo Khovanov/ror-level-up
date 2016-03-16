@@ -1,5 +1,6 @@
-p: strong = @question.title
-p = @question.body
+- cache_if (user_signed_in?), ['user', @question] do
+  p: strong = @question.title
+  p = @question.body
 = render 'attachments/attachment_list', resource: @question
 = render 'questions/vote', question: @question
 = render 'questions/subscription', question: @question
