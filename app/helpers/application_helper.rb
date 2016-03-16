@@ -6,4 +6,10 @@ module ApplicationHelper
     max_updated_at = klass.maximum(:updated_at).try(:utc).try(:to_s, :number)
     "#{model.to_s.pluralize}/collection-#{count}-#{max_updated_at}"
   end
+
+  # def collection_question_comment_cache_key(question)
+  #   count = question.comments.count
+  #   max_updated_at = question.comments.maximum(:updated_at).try(:utc).try(:to_s, :number)
+  #   "questions/question-#{question.id}/comments/collection-#{count}-#{max_updated_at}"
+  # end
 end

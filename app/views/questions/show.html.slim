@@ -1,4 +1,4 @@
-- cache_unless current_user.try(:admin), @question do
+- cache_if (not user_signed_in?), ['guest', @question] do
   h1 Question
   = link_to 'Back to list', questions_path 
   .question data={ question_id: "#{@question.id}" }
@@ -15,9 +15,10 @@
   - else
     p No answers found.
 
-  h3 Add answer
-  #add-answer-errors
-  = render partial: 'answers/form', locals: {answer: @answer ,submit_text: 'Create Answer'}
+  - if user_signed_in?
+    h3 Add answer
+    #add-answer-errors
+    = render partial: 'answers/form', locals: {answer: @answer ,submit_text: 'Create Answer'}
 
 = subscribe_to "/questions/#{@question.id}/comments"
 = subscribe_to "/questions/#{@question.id}/answers"

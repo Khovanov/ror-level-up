@@ -5,8 +5,7 @@ h1 Questions list
   => link_to 'Log in', new_user_session_path
   => link_to 'Register', new_user_registration_path
 hr
-- cache 'searches_form' do
-  = render 'searches/form' 
+= render 'searches/form' 
 
 - if can?(:create, Question)
   = link_to 'Ask your question', new_question_path
