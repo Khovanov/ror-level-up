@@ -23,7 +23,7 @@ gem 'jquery-turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-gem 'devise' 
+gem 'devise'
 gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
@@ -49,7 +49,7 @@ gem 'thinking-sphinx', '~> 3.1.4'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
-gem 'unicorn'
+# gem 'unicorn'
 gem 'redis-rails'
 
 # Use ActiveModel has_secure_password
@@ -66,7 +66,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'json_spec'  
+  gem 'json_spec'
 end
 
 group :development do
@@ -77,14 +77,14 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-sidekiq', require: false
-  # gem 'capistrano-passenger', require: false
-  gem 'capistrano3-unicorn', require: false
+  gem 'capistrano-passenger', require: false
+  # gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
   gem 'shoulda-matchers', '>= 3.0.0', require: false
   gem 'capybara'
-  gem 'launchy' 
+  gem 'launchy'
   # gem 'selenium-webdriver'
   # gem 'capybara-webkit'
   gem 'poltergeist'
